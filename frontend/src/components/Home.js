@@ -10,11 +10,8 @@ const Home=()=>{
     return (
         <React.Fragment>
             <Banner/>
-            <FlatList/>
-            <BestFlatList/>
-            <Subscribe/>
-            <TeamList/>
-            <References/>
+            <FlatList title="Popular Properties" description="Find some of the most popular properties" />
+            <BestFlatList title="Best Price Properties" description="Find properties with lower price" />
         </React.Fragment>
     )
 }
