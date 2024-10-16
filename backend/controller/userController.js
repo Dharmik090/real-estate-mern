@@ -115,6 +115,33 @@ const getUserByUsername = async (req, res) => {
     }
 }
 
+const updateUser = async (req,res) => {
+      const id = req.params.userid;
+      
+      try{
+          const user = await User.FindByIdAndUpdate(id,req.body);
+          if(!user){
+            return res.status(404).json({ message :'User nor found'});
+          }
+          res.json(user);
+      }catch(e){
+        res.send("Error: "+err);
+      }
+}
+
+const deleteUserById = async (req,res) => {
+    const id = req.params.userid;
+    try{
+        const user = await User.DeleteOne({_id:id});
+        if(!user){
+            return res.status(404).json({ message : `User with id ${id} not found` });
+        }
+        res.json({message : `User deleted successfully`});
+    }catch(e){
+        res.send("Error : "+ e);
+    }
+    
+}
 
 module.exports = {
     addUser,

@@ -5,13 +5,14 @@ const jwt = require('jsonwebtoken');
 const addProperty = async (req, res) => {
     const userid = req.params.userid;
     const { description, price, bhk, area, status, location, city, state, country, latitude, longtitude } = req.body;
-
+    console.log(userid);
     try {
         const user = await User.findById(userid);
 
         const property = new Property({ description, price, bhk, area, status, location, city, state, country, latitude, longtitude, userid });
 
         await property.save();
+        console.log("ddddddddd");
         res.status(201).json({ message : 'Property created successfully'});
     }
     catch (err) {
@@ -66,6 +67,35 @@ const getPropertyByUserId = async (req, res) => {
     }
 }
 
+const updateProperty = async (req,res) => {
+    const id = req.params.id;
+    try{
+        const property = await Property.findByIdAndUpdate(id, req.body, { new: true });
+        if (!property) {
+            res.status(404).send(`Property with ID ${id} not found`);
+        } else {
+            res.send(property);
+        }
+    }catch(e){
+        res.status(500).send('Error :'+e);
+    }
+}
+
+const deletePropertyById = async (req,res) => {
+    const id = req.params.id;
+   
+    try{
+        const property = await Property.deleteOne({_id:id});
+        if(!property){
+            res.status(404).send(`Property with ID ${id} not found`);
+            return;
+        }
+        
+        res.send(`Property with ID ${id} deleted successfully`);
+    }catch(err){
+        res.send('ERROR : ' + err);
+    }
+}
 
 module.exports = {
     addProperty,

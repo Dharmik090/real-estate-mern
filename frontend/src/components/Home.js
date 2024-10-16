@@ -5,6 +5,7 @@ import TeamList from "./TeamList"
 import References from "./References"
 import Subscribe from "./Subscribe"
 import BestFlatList from "./BestFlatList"
+import Register from "./Register"
 
 const Home=()=>{
     return (
