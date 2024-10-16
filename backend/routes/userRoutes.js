@@ -13,5 +13,8 @@ router.post('/signin',controller.userSignIn);
 
 router.get('/signin/:username',controller.getUserByUsername);   // Flutter 
 
+router.put('/user/:userid',controller.updateUser);
+
+router.delete('/user/:userid',controller.deleteUserById);
 
 module.exports = router;
