@@ -2,6 +2,9 @@ import { React, useState, useEffect } from "react"
 import { Link } from "react-router-dom"
 
 const Header = (props) => {
+
+    const [isLoggedIn,setIsLoggedIn] = useState(localStorage.getItem('userId'));
+    
     return (
         <div className="header">
             <div className="container">
@@ -26,31 +29,25 @@ const Header = (props) => {
                                 <li className="nav-item">
                                     <Link className="nav-link" to="/blog">Blog</Link>
                                 </li>
-                                <li className="nav-item">
-                                    <Link className="nav-link" to="/about">About</Link>
-                                </li>
-                                <li className="nav-item">
+                                {/* <li className="nav-item">
                                     <Link className="nav-link" to="#">Category <i className="fas fa-chevron-down"></i></Link>
                                     <ul className="sub-ul">
                                         <li><Link to="#">item</Link></li>
                                         <li><Link to="#">item</Link></li>
                                         <li><Link to="#">item</Link></li>
                                     </ul>
-                                </li>
-                                <li className="nav-item">
-                                    <Link className="nav-link" to="/contact">Contact</Link>
-                                </li>
-                                {!props.isLoggedIn &&
+                                </li> */}
+                                {!isLoggedIn &&
                                     <li className="nav-item">
                                         <Link className="nav-link" to="/login">Register | Login</Link>
                                     </li>
                                 }
-                                {props.isLoggedIn &&
+                                {isLoggedIn &&
                                     <li className="nav-item">
                                         <Link className="nav-link" to="/profile">Profile</Link>
                                     </li>
                                 }
-                                {props.isLoggedIn &&
+                                {isLoggedIn &&
                                     <li className="nav-item">
                                         <Link className="nav-link" to="/login" onClick={() => {
                                             props.setIsLoggedIn(false);

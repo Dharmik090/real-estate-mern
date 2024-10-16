@@ -20,7 +20,7 @@ export default class propertyService extends Component {
             'Content-Type': 'application/json',
         }
 
-        return axios.post(requestUrl, data, { headers });
+        return axios.post(requestUrl, property, { headers });
     }
 
     getPropertyByUserId(userid){

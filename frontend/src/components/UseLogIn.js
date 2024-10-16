@@ -1,6 +1,6 @@
 import { useState } from "react"
 import userService from "../services/userService";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import UserForm from "./UserForm";
 
 export default function UserRegisterLogin(props) {

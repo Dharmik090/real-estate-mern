@@ -3,7 +3,20 @@ const router = express.Router();
 const controller = require('../controller/userController');
 
 
-router.post('/user',controller.addUser);
+
+const multer = require('multer');
+
+const storage = multer.memoryStorage();
+
+const upload = multer({
+    storage: storage,
+    limits: { fileSize: 1000000 }, // Limit file size to 1MB
+});
+
+
+
+
+router.post('/user',upload.single('avatar'),controller.addUser);
 
 router.get('/user/:userid',controller.getUserByUserId);
 
