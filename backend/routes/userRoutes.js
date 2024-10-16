@@ -9,9 +9,9 @@ router.get('/user/:userid',controller.getUserByUserId);
 
 router.get('/users',controller.getAllUsers);
 
-router.post('/signin',controller.userSignIn);   
+router.post('/login',controller.userLogIn);   
 
-router.get('/signin/:username',controller.getUserByUsername);   // Flutter 
+router.get('/login/:username',controller.getUserByUsername);   // Flutter 
 
 
 module.exports = router;

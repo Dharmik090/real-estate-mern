@@ -3,7 +3,7 @@ const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 
 const addProperty = async (req, res) => {
-    const userid = req.params.id;
+    const userid = req.params.userid;
     const { description, price, bhk, area, status, location, city, state, country, latitude, longtitude } = req.body;
 
     try {
@@ -49,11 +49,11 @@ const getPropertyById = async (req, res) => {
     }
 }
 
-const getPropertyByUsername = async (req, res) => {
-    const username = req.params.username;
+const getPropertyByUserId = async (req, res) => {
+    const userid = req.params.userid;
     
     try {
-        const user = await User.findOne({ username });
+        const user = await User.findById(userid);
         if (!user) {
             return res.status(404).json({ message : 'User not found' });
         }
@@ -71,5 +71,5 @@ module.exports = {
     addProperty,
     getAllProperties,
     getPropertyById,
-    getPropertyByUsername
+    getPropertyByUserId
 }
