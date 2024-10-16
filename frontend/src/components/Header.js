@@ -1,7 +1,7 @@
-import React from "react"
-import {Link} from "react-router-dom"
+import { React, useState, useEffect } from "react"
+import { Link } from "react-router-dom"
 
-const Header = () => {
+const Header = (props) => {
     return (
         <div className="header">
             <div className="container">
@@ -9,10 +9,10 @@ const Header = () => {
                     <div className="container-fluid">
                         <Link className="navbar-brand" to="/">
                             <div className="d-flex align-items-center">
-                            <i className="fas fa-home"></i>
+                                <i className="fas fa-home"></i>
                                 <span className="ms-2">
-                                    MB
-                           </span>
+                                    EstateEase
+                                </span>
                             </div>
                         </Link>
                         <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -24,10 +24,10 @@ const Header = () => {
                                     <Link className="nav-link" to="/">Home</Link>
                                 </li>
                                 <li className="nav-item">
-                                    <Link  className="nav-link" to="/property">Property</Link>
+                                    <Link className="nav-link" to="/blog">Blog</Link>
                                 </li>
                                 <li className="nav-item">
-                                    <Link  className="nav-link" to="/about">About</Link>
+                                    <Link className="nav-link" to="/about">About</Link>
                                 </li>
                                 <li className="nav-item">
                                     <Link className="nav-link" to="#">Category <i className="fas fa-chevron-down"></i></Link>
@@ -40,9 +40,25 @@ const Header = () => {
                                 <li className="nav-item">
                                     <Link className="nav-link" to="/contact">Contact</Link>
                                 </li>
-                                <li className="nav-item">
-                                    <Link className="nav-link" to="/register">Register</Link>
-                                </li>
+                                {!props.isLoggedIn &&
+                                    <li className="nav-item">
+                                        <Link className="nav-link" to="/login">Register | Login</Link>
+                                    </li>
+                                }
+                                {props.isLoggedIn &&
+                                    <li className="nav-item">
+                                        <Link className="nav-link" to="/profile">Profile</Link>
+                                    </li>
+                                }
+                                {props.isLoggedIn &&
+                                    <li className="nav-item">
+                                        <Link className="nav-link" to="/login" onClick={() => {
+                                            props.setIsLoggedIn(false);
+                                            localStorage.setItem('userId', '');
+                                            localStorage.setItem('authToken', '');
+                                        }}>Logout</Link>
+                                    </li>
+                                }
                             </ul>
                         </div>
                     </div>

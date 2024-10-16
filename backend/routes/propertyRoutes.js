@@ -4,11 +4,11 @@ const controller = require('../controller/propertyController');
 const controller2 = require('../controller/imageController');
 const authMiddleware = require('../util/authMiddleware');
 
-router.post('/property/:id',controller.addProperty);
+router.post('/property/:userid',authMiddleware,controller.addProperty);
 
 router.get('/properties',controller.getAllProperties);
 
-router.get('/property/:username',controller.getPropertyByUsername);
+router.get('/property/:userid',controller.getPropertyByUserId);
 
 router.put('/property/:id',controller.updateProperty);
 
