@@ -5,6 +5,9 @@ const Header = (props) => {
 
     const [isLoggedIn,setIsLoggedIn] = useState(localStorage.getItem('userId'));
     
+    useEffect(() => {
+        setIsLoggedIn(localStorage.getItem('userId'));
+    })
     return (
         <div className="header">
             <div className="container">
@@ -49,7 +52,7 @@ const Header = (props) => {
                                 }
                                 {isLoggedIn &&
                                     <li className="nav-item">
-                                        <Link className="nav-link" to="/login" onClick={() => {
+                                        <Link className="nav-link" to="/" onClick={() => {
                                             props.setIsLoggedIn(false);
                                             localStorage.setItem('userId', '');
                                             localStorage.setItem('authToken', '');

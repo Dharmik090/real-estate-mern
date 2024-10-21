@@ -1,25 +1,23 @@
 import { Link } from "react-router-dom";
 
-const FlatItem = ({slug}) => {
+const FlatItem = (props) => {
     return (
         <div className="text-center col-lg-4 col-12 col-md-6 ">
             <div className="item">
                 <div className="item-image">
-                    <img className="img-fluid" src="/img/product1.jpeg" alt="flat" />
+                    <img className="img-fluid" src={props.property.images[0].original} alt="flat" />
                 </div>
                 <div className="item-description">
                     <div className="d-flex justify-content-between mb-3">
-                        <span className="item-title">Lorem ipsum dolor sit amet consectetur adipiscing elit</span>
-                        <span className="item-price">$1000</span>
+                        <span className="item-title">{props.property.title}</span>
+                        <span className="item-price">{props.property.price}</span>
                     </div>
                     <div className="item-icon d-flex alig-items-center justify-content-between">
                         <div>
-                            <i className="fas fa-check-circle"></i> <span>Lorem ipsum dolor</span>
+                            <p className="fd-address"> <i className="fas fa-map-marker-alt"></i>
+                                {props.property.city}</p>
                         </div>
-                        <div>
-                            <i className="fas fa-check-circle"></i> <span> Lorem </span>
-                        </div>
-                        <Link to={`/flat/${slug}`} className="item-title">
+                        <Link to={`/flat/${props.property._id}`} className="item-title">
                             <button className="btn btn-detail">View</button>
                         </Link>
                     </div>

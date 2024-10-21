@@ -1,22 +1,45 @@
-import React from "react";
-import ImageGallery from 'react-image-gallery';
+import { React, useState, useEffect } from "react";
+import propertyService from "../services/propertyService";
+import { useParams } from "react-router-dom";
+import Slider from "react-slick";
 
 
 const FlatDetail = () => {
-    const images = [
-        {
-            original: '/img/product1.jpeg',
-            thumbnail: '/img/product1.jpeg',
-        },
-        {
-            original: '/img/banner.jpg',
-            thumbnail: '/img/banner.jpg',
-        },
-        {
-            original: '/img/product1.jpeg',
-            thumbnail: '/img/product1.jpeg',
-        },
-    ];
+
+    const settings = {
+        dots: true, 
+        infinite: true,
+        speed: 500,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        centerMode: true,
+        centerPadding: '60px',
+        adaptiveHeight: true,
+        arrows: true
+    };
+
+
+    const { id } = useParams();
+
+    const [property, setProperty] = useState({});
+
+    const fetchData = async () => {
+        const response = await new propertyService().getPropertyById(id);
+
+        const data = response.data;
+
+        data.images = data.images.map(image => {
+            return ({
+                original: image,
+            });
+        });
+
+        setProperty(data);
+    }
+
+    useEffect(() => {
+        fetchData();
+    }, []);
 
     return (
         <div className="flat-detail">
@@ -24,8 +47,7 @@ const FlatDetail = () => {
                 <div className="container">
                     <div className="row">
                         <div className="col-lg-12">
-                            <h1 className="page-title">DETAIL</h1>
-                            <h2 className="page-description">Lorem ipsum dolor sit amet</h2>
+                            <h1 className="page-title">Property Details</h1>
                         </div>
                     </div>
                 </div>
@@ -35,64 +57,66 @@ const FlatDetail = () => {
                     <div className="col-lg-12">
                         <div className="fd-top flat-detail-content">
                             <div>
-                                <h3 className="flat-detail-title">Lorem ipsum dolor sit amet.</h3>
+                                <h3 className="flat-detail-title">{property.title}</h3>
                                 <p className="fd-address"> <i className="fas fa-map-marker-alt"></i>
-                                Lorem ipsum dolor sit amet</p>
+                                    {property.city}</p>
                             </div>
                             <div>
-                                <span className="fd-price">$650</span>
+                                <span className="fd-price">${property.price}</span>
                             </div>
                         </div>
-                        <ImageGallery flickThreshold={0.50} slideDuration={0} items={images} showNav={false} showFullscreenButton={false} showPlayButton={false} />
+
+                        <Slider {...settings}>
+                            {property.images && property.images.map((image, index) => (
+                                <div key={index} className="d-flex justify-content-center m-5" style={{ padding: '0 10px' }}> {/* Add padding for margin effect */}
+                                    <img
+                                        src={image.original}
+                                        alt={`Property Image ${index + 1}`}
+                                        style={{
+                                            width: "50%",
+                                            height: "30rem",
+                                            objectFit: "cover",
+                                            borderRadius: "8px",
+                                        }}
+                                    />
+                                </div>
+                            ))}
+                        </Slider>
+
+
                         <div className="row">
                             <div className="col-lg-8">
                                 <div className="fd-item">
                                     <h4>Description</h4>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
+                                    <p>{property.description}</p>
                                 </div>
                                 <div className="fd-item fd-property-detail">
                                     <h4>Property Details</h4>
                                     <div className="row">
                                         <div className="col-lg-4">
-                                            <span>Kitchen: </span>
-                                            <span>1</span>
+                                            <span>{property.bhk} BHK</span>
                                         </div>
-                                        <div className="col-lg-4">
+                                        {/* <div className="col-lg-4">
                                             <span>All Rooms: </span>
                                             <span>5</span>
                                         </div>
                                         <div className="col-lg-4">
                                             <span>Kitchen:  </span>
                                             <span>1</span>
+                                        </div> */}
+                                    </div>
+                                    <div className="row">
+                                        <div className="col-lg-4">
+                                            <span>Location: {property.location}</span>
                                         </div>
                                     </div>
                                     <div className="row">
                                         <div className="col-lg-4">
-                                            <span>Kitchen: </span>
-                                            <span>1</span>
+                                            <span>City: {property.city}</span>
                                         </div>
                                         <div className="col-lg-4">
-                                            <span>All Rooms: </span>
-                                            <span>5</span>
-                                        </div>
-                                        <div className="col-lg-4">
-                                            <span>Kitchen:  </span>
-                                            <span>1</span>
-                                        </div>
-                                    </div>
-                                    <div className="row">
-                                        <div className="col-lg-4">
-                                            <span>Kitchen: </span>
-                                            <span>1</span>
-                                        </div>
-                                        <div className="col-lg-4">
-                                            <span>All Rooms: </span>
-                                            <span>5</span>
-                                        </div>
-                                        <div className="col-lg-4">
-                                            <span>Kitchen:  </span>
-                                            <span>1</span>
-                                        </div>
+                                            <span>Coutry: {property.country}</span>
+                                        </div> 
                                     </div>
                                 </div>
                                 <div className="fd-item fd-features">

@@ -10,7 +10,7 @@ const UserRegister = () => {
     const [email, setEmail] = useState('');
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [avatar,setAvatar] = useState(null);
+    const [avatar, setAvatar] = useState(null);
 
     const [firstnameError, setFirstnameError] = useState('');
     const [lastnameError, setLastnameError] = useState('');
@@ -45,17 +45,17 @@ const UserRegister = () => {
             setUsername(value);
             setUsernameError(error);
         }
-        else if (field === 'password'){
+        else if (field === 'password') {
             setPassword(value);
             setPasswordError(error);
         }
         else {
             setAvatar(e.target.files[0]);
         }
-        
+
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         const formData = new FormData();
         formData.append('firstname', firstname);
@@ -64,9 +64,10 @@ const UserRegister = () => {
         formData.append('email', email);
         formData.append('password', password);
         formData.append('avatar', avatar);
-        
-        // console.log(-1,user);
-        new userServices().addUser(formData).then((response) => {
+
+        try {
+            const response = await new userServices().addUser(formData);
+
             setFirstname('');
             setLastname('');
             setUsername('');
@@ -74,17 +75,18 @@ const UserRegister = () => {
             setPassword('');
 
             navigator("/login");
-        }).catch((err) => {
+        }
+        catch (err) {
             setPassword('');
             const message = err.response.data.message;
-            
-            if(message === 'Email already exist'){
+
+            if (message === 'Email already exist') {
                 setEmailError(message);
             }
-            else if(message === 'Username already exist'){
+            else if (message === 'Username already exist') {
                 setUsernameError(message);
             }
-        });
+        };
     };
 
     const inputFields = (
@@ -134,7 +136,7 @@ const UserRegister = () => {
                 <input type="file" className="form-control form-control-lg" id="avatar" name="avatar"
                     onChange={validateField} onBlur={validateField} />
                 {/* <div className="text-danger small" style={{ fontSize: '1rem' }}>{}</div> */}
-            </div>            
+            </div>
         </>
     );
 

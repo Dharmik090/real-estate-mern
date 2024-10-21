@@ -1,267 +1,277 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from "react-router-dom";
-import { UseAuth } from './AuthContext';
+import { useNavigate, useParams } from "react-router-dom";
+import propertyService from '../services/propertyService';
 
 const PropertyForm = () => {
-    // Defining state for each input field
-    const [description, setDescription] = useState('');
-    const [price, setPrice] = useState('');
-    const [bhk, setBhk] = useState('');
-    const [area, setArea] = useState('');
-    const [status, setStatus] = useState('');
-    const [location, setLocation] = useState('');
-    const [city, setCity] = useState('');
-    const [state, setState] = useState('');
-    const [country, setCountry] = useState('');
-    const [latitude, setLatitude] = useState('');
-    const [longitude, setLongitude] = useState('');
-    const [userid, setUserId] = useState(''); // Assuming you have a way to get the user ID
-    const [images, setImages] = useState([]); // For storing multiple image URLs
+
+    const { id } = useParams();
+
+    const [property, setProperty] = useState({
+        title: '',
+        description: '',
+        price: '',
+        bhk: '',
+        area: '',
+        status: '',
+        location: '',
+        city: '',
+        state: '',
+        country: '',
+        latitude: '',
+        longitude: '',
+        images: null
+    });
+
+    const fetchData = async () => {
+        const response = await new propertyService().getPropertyById(id);
+
+        const data = response.data;
+        data.images = data.images.map(image => {
+
+            return ({
+                original: image,
+            });
+        });
+        setProperty(response.data);
+    };
+
+    useEffect(() => {
+
+        if (id) {
+            fetchData();
+        }
+    }, []);
+
 
     const navigator = useNavigate();
-    const { userId } = UseAuth();
-    // Function to handle form submission
+
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        console.log(userId);
-        // Prepare form data
-        const formData = {
-            description,
-            price: Number(price),
-            bhk: Number(bhk),
-            area: Number(area),
-            status,
-            location,
-            city,
-            state,
-            country,
-            latitude: Number(latitude),
-            longitude: Number(longitude),
-            images,
-            userId
-        };
+        const formData = new FormData();
+        formData.append('title', property.title);
+        formData.append('description', property.description);
+        formData.append('price', Number(property.price));
+        formData.append('bhk', Number(property.bhk));
+        formData.append('area', Number(property.area));
+        formData.append('status', property.status);
+        formData.append('location', property.location);
+        formData.append('city', property.city);
+        formData.append('state', property.state);
+        formData.append('country', property.country);
+        formData.append('latitude', Number(property.latitude));
+        formData.append('longitude', Number(property.longitude));
+        property.images.forEach((image, index) => {
+            formData.append('images', image);
+        });
+
 
         try {
-            // Make the POST request using axios
-            // const response =  axios.post('http://localhost:5000/user', formData);
+            const userId = localStorage.getItem('userId');
 
-            const response = axios.post('http://localhost:5000/property/670e6a4cccd6c48edcad3462', formData);
-                response.then((r) => {
-                    navigator("/addimages");
-                    console.log(-2,r.data.message);
-                }).catch((err)=>{
-                    console.log(-1,err.response.data.message);
-                })
-    
-        } catch (error) {
-            console.error('Error during property submission:', error);
-            alert('An error occurred. Please try again.');
+            if (id) {
+                const response = await new propertyService().updateProperty(id, formData);
+                // response.data.message
+            }
+            else {
+                const response = await new propertyService().addProperty(userId, formData);
+            }
+            navigator('/profile');
+        } catch (err) {
+            console.log(err.response.data.message);
         }
-
-        // Clear the form if needed
-        setDescription('');
-        setPrice('');
-        setBhk('');
-        setArea('');
-        setStatus('');
-        setLocation('');
-        setCity('');
-        setState('');
-        setCountry('');
-        setLatitude('');
-        setLongitude('');
-        setImages([]);
     };
 
+
     return (
-        <div className="container" style={{ padding: "5rem 0rem" }}>
-            <h2 className='text-center mt-5'>Add Property</h2>
-            <div className='py-5 d-flex justify-content-center'>
-                <div className="d-block mt-0 w-50">
-                    <form onSubmit={handleSubmit}>
-                        {/* Description */}
-                        <div className="row mb-3">
-                            <label htmlFor="description" className="col-md-3 control-label">Description</label>
-                            <div className="col-md-9">
-                                <textarea
-                                    className="form-control"
-                                    placeholder="Enter Description"
-                                    name="description"
-                                    value={description}
-                                    // value="dddd"
-                                    onChange={(e) => setDescription(e.target.value)}
-                                />
-                            </div>
-                        </div>
+        <div className="mb-5 mt-5 container-fluid d-flex justify-content-center align-items-center bg-light">
+            <div className="card p-5 shadow-sm" style={{ maxWidth: '700px', width: '100%' }}>
+                <h3 className="text-center mb-4" style={{ fontSize: '2rem' }}>{id ? 'Edit ' : 'Add'} Property</h3>
 
-                        {/* Price */}
-                        <div className="row mb-3">
-                            <label htmlFor="price" className="col-md-3 control-label">Price</label>
-                            <div className="col-md-9">
-                                <input
-                                    type="number"
-                                    className="form-control"
-                                    placeholder="Enter Price"
-                                    name="price"
-                                    value={price}
-                                    // value="1200"
-                                    onChange={(e) => setPrice(e.target.value)}
-                                />
-                            </div>
-                        </div>
+                <form onSubmit={handleSubmit}>
 
-                        {/* BHK */}
-                        <div className="row mb-3">
-                            <label htmlFor="bhk" className="col-md-3 control-label">BHK</label>
-                            <div className="col-md-9">
-                                <input
-                                    type="number"
-                                    className="form-control"
-                                    placeholder="Enter BHK"
-                                    name="bhk"
-                                    value={bhk}
-                                    // value="3"
-                                    onChange={(e) => setBhk(e.target.value)}
-                                />
-                            </div>
+                    <div className="row mb-3">
+                        <label htmlFor="title" className="col-md-3 control-label">Title</label>
+                        <div className="col-md-9">
+                            <textarea
+                                className="form-control"
+                                placeholder="Enter Title"
+                                name="title"
+                                value={property.title}
+                                onChange={(e) => setProperty({ ...property, [e.target.name]: e.target.value })}
+                            />
                         </div>
+                    </div>
 
-                        {/* Area */}
-                        <div className="row mb-3">
-                            <label htmlFor="area" className="col-md-3 control-label">Area (sq ft)</label>
-                            <div className="col-md-9">
-                                <input
-                                    type="number"
-                                    className="form-control"
-                                    placeholder="Enter Area"
-                                    name="area"
-                                    value={area}
-                                    // value="1500"
-                                    onChange={(e) => setArea(e.target.value)}
-                                />
-                            </div>
+                    <div className="row mb-3">
+                        <label htmlFor="description" className="col-md-3 control-label">Description</label>
+                        <div className="col-md-9">
+                            <textarea
+                                className="form-control"
+                                placeholder="Enter Description"
+                                name="description"
+                                value={property.description}
+                                onChange={(e) => setProperty({ ...property, [e.target.name]: e.target.value })}
+                            />
                         </div>
+                    </div>
 
-                        {/* Status */}
-                        <div className="row mb-3">
-                            <label htmlFor="status" className="col-md-3 control-label">Status</label>
-                            <div className="col-md-9">
-                                <input
-                                    type="text"
-                                    className="form-control"
-                                    placeholder="Enter Status (e.g. Available)"
-                                    name="status"
-                                    value={status}
-                                    // value="rent"
-                                    onChange={(e) => setStatus(e.target.value)}
-                                />
-                            </div>
+                    <div className="row mb-3">
+                        <label htmlFor="price" className="col-md-3 control-label">Price</label>
+                        <div className="col-md-9">
+                            <input
+                                type="number"
+                                className="form-control"
+                                placeholder="Enter Price"
+                                name="price"
+                                value={property.price}
+                                onChange={(e) => setProperty({ ...property, [e.target.name]: e.target.value })}
+                            />
                         </div>
+                    </div>
 
-                        {/* Location */}
-                        <div className="row mb-3">
-                            <label htmlFor="location" className="col-md-3 control-label">Location</label>
-                            <div className="col-md-9">
-                                <input
-                                    type="text"
-                                    className="form-control"
-                                    placeholder="Enter Location"
-                                    name="location"
-                                    value={location}
-                                    // value="near template link"
-                                    onChange={(e) => setLocation(e.target.value)}
-                                />
-                            </div>
+                    <div className="row mb-3">
+                        <label htmlFor="bhk" className="col-md-3 control-label">BHK</label>
+                        <div className="col-md-9">
+                            <input
+                                type="number"
+                                className="form-control"
+                                placeholder="Enter BHK"
+                                name="bhk"
+                                value={property.bhk}
+                                onChange={(e) => setProperty({ ...property, [e.target.name]: e.target.value })}
+                            />
                         </div>
+                    </div>
 
-                        {/* City */}
-                        <div className="row mb-3">
-                            <label htmlFor="city" className="col-md-3 control-label">City</label>
-                            <div className="col-md-9">
-                                <input
-                                    type="text"
-                                    className="form-control"
-                                    placeholder="Enter City"
-                                    name="city"
-                                    value={city}
-                                    // value="morbi"
-                                    onChange={(e) => setCity(e.target.value)}
-                                />
-                            </div>
+                    <div className="row mb-3">
+                        <label htmlFor="area" className="col-md-3 control-label">Area (sq ft)</label>
+                        <div className="col-md-9">
+                            <input
+                                type="number"
+                                className="form-control"
+                                placeholder="Enter Area"
+                                name="area"
+                                value={property.area}
+                                onChange={(e) => setProperty({ ...property, [e.target.name]: e.target.value })}
+                            />
                         </div>
+                    </div>
 
-                        {/* State */}
-                        <div className="row mb-3">
-                            <label htmlFor="state" className="col-md-3 control-label">State</label>
-                            <div className="col-md-9">
-                                <input
-                                    type="text"
-                                    className="form-control"
-                                    placeholder="Enter State"
-                                    name="state"
-                                    value={state}
-                                    // value="karachi"
-                                    onChange={(e) => setState(e.target.value)}
-                                />
-                            </div>
+                    <div className="row mb-3">
+                        <label htmlFor="status" className="col-md-3 control-label">Status</label>
+                        <div className="col-md-9">
+                            <input
+                                type="text"
+                                className="form-control"
+                                placeholder="Enter Status (e.g. Available)"
+                                name="status"
+                                value={property.status}
+                                onChange={(e) => setProperty({ ...property, [e.target.name]: e.target.value })}
+                            />
                         </div>
+                    </div>
 
-                        {/* Country */}
-                        <div className="row mb-3">
-                            <label htmlFor="country" className="col-md-3 control-label">Country</label>
-                            <div className="col-md-9">
-                                <input
-                                    type="text"
-                                    className="form-control"
-                                    placeholder="Enter Country"
-                                    name="country"
-                                    value={country}
-                                    // value="USA"
-                                    onChange={(e) => setCountry(e.target.value)}
-                                />
-                            </div>
+                    <div className="row mb-3">
+                        <label htmlFor="location" className="col-md-3 control-label">Location</label>
+                        <div className="col-md-9">
+                            <input
+                                type="text"
+                                className="form-control"
+                                placeholder="Enter Location"
+                                name="location"
+                                value={property.location}
+                                onChange={(e) => setProperty({ ...property, [e.target.name]: e.target.value })}
+                            />
                         </div>
+                    </div>
 
-                        {/* Latitude */}
-                        <div className="row mb-3">
-                            <label htmlFor="latitude" className="col-md-3 control-label">Latitude</label>
-                            <div className="col-md-9">
-                                <input
-                                    type="number"
-                                    className="form-control"
-                                    placeholder="Enter Latitude"
-                                    name="latitude"
-                                    value={latitude}
-                                    // value="20"
-                                    onChange={(e) => setLatitude(e.target.value)}
-                                />
-                            </div>
+                    <div className="row mb-3">
+                        <label htmlFor="city" className="col-md-3 control-label">City</label>
+                        <div className="col-md-9">
+                            <input
+                                type="text"
+                                className="form-control"
+                                placeholder="Enter City"
+                                name="city"
+                                value={property.city}
+                                onChange={(e) => setProperty({ ...property, [e.target.name]: e.target.value })}
+                            />
                         </div>
+                    </div>
 
-                        {/* Longitude */}
-                        <div className="row mb-3">
-                            <label htmlFor="longitude" className="col-md-3 control-label">Longitude</label>
-                            <div className="col-md-9">
-                                <input
-                                    type="number"
-                                    className="form-control"
-                                    placeholder="Enter Longitude"
-                                    name="longitude"
-                                    value={longitude}
-                                    // value="30"
-                                    onChange={(e) => setLongitude(e.target.value)}
-                                />
-                            </div>
+                    <div className="row mb-3">
+                        <label htmlFor="state" className="col-md-3 control-label">State</label>
+                        <div className="col-md-9">
+                            <input
+                                type="text"
+                                className="form-control"
+                                placeholder="Enter State"
+                                name="state"
+                                value={property.state}
+                                onChange={(e) => setProperty({ ...property, [e.target.name]: e.target.value })}
+                            />
                         </div>
+                    </div>
 
-                        {/* Submit Button */}
-                        <div className="row mt-5 d-flex justify-content-center">
-                            <button type="submit" className="btn btn-primary w-25">Add Property</button>
+                    <div className="row mb-3">
+                        <label htmlFor="country" className="col-md-3 control-label">Country</label>
+                        <div className="col-md-9">
+                            <input
+                                type="text"
+                                className="form-control"
+                                placeholder="Enter Country"
+                                name="country"
+                                value={property.country}
+                                onChange={(e) => setProperty({ ...property, [e.target.name]: e.target.value })}
+                            />
                         </div>
-                    </form>
-                </div>
+                    </div>
+
+                    <div className="row mb-3">
+                        <label htmlFor="latitude" className="col-md-3 control-label">Latitude</label>
+                        <div className="col-md-9">
+                            <input
+                                type="number"
+                                className="form-control"
+                                placeholder="Enter Latitude"
+                                name="latitude"
+                                value={property.latitude}
+                                onChange={(e) => setProperty({ ...property, [e.target.name]: e.target.value })}
+                            />
+                        </div>
+                    </div>
+
+                    <div className="row mb-3">
+                        <label htmlFor="longitude" className="col-md-3 control-label">Longitude</label>
+                        <div className="col-md-9">
+                            <input
+                                type="number"
+                                className="form-control"
+                                placeholder="Enter Longitude"
+                                name="longitude"
+                                value={property.longitude}
+                                onChange={(e) => setProperty({ ...property, [e.target.name]: e.target.value })}
+                            />
+                        </div>
+                    </div>
+
+                    <div className="mb-4">
+                        <label htmlFor="images" className="form-label">Profile Picture</label>
+                        <input type="file" className="form-control" id="images" name="images"
+                            onChange={(e) => {
+                                const files = Array.from(e.target.files);
+                                setProperty({ ...property, [e.target.name]: files });
+                            }} multiple />
+                    </div>
+
+                    <div className="row mt-5 d-flex justify-content-center">
+                        <button type="submit" className="btn btn-primary w-25 m-2">{(id) ? 'Edit' : 'Add'} Property</button>
+                        <button className="btn btn-secondary w-25 m-2" onClick={() => navigator('/profile')}>Cancel</button>
+                    </div>
+                </form>
             </div>
         </div>
     );

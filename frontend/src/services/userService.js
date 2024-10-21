@@ -8,13 +8,12 @@ export default class userServices extends Component {
     }
 
     addUser(user) {
-        console.log(user);
         const requestUrl = this.URL + '/user';
-        return axios.post(requestUrl, user, {
-            headers: {
-                'Content-Type': 'multipart/form-data' // Optional, axios sets this automatically
-            }
-        });
+        const headers = {
+            'Content-Type': 'multipart/form-data'
+        };
+
+        return axios.post(requestUrl, user, { headers });
     }
 
     userLogIn(user) {
@@ -24,6 +23,23 @@ export default class userServices extends Component {
 
     getUserById(userid) {
         const requestUrl = this.URL + `/user/${userid}`;
-        return axios.get(requestUrl);
+        const headers = {
+            'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        }
+
+        return axios.get(requestUrl, { headers });
+    }
+
+    updateUser(userid, user) {
+        const requestUrl = this.URL + `/user/${userid}`;
+        const headers = {
+            'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
+            'Accept': 'application/json',
+            'Content-Type': 'multipart/form-data'
+        }
+
+        return axios.put(requestUrl, user, { headers });
     }
 }

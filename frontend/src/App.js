@@ -14,12 +14,8 @@ import Profile from './components/Profile';
 import { useState } from 'react'
 import UserRegister from './components/UserRegister';
 
-import {BrowserRouter as Router,Route, Routes} from "react-router-dom";
-import Register from './components/Register';
-import Property from './components/Property';
 import PropertyForm from './components/PropertyForm';
-import ImageUpload from './components/ImageUpload';
-import { AuthProvider } from './components/AuthContext';
+
 
 function App() {
 
@@ -36,14 +32,14 @@ function App() {
           <Route exact path="/about" element={<About />}></Route>
           <Route exact path="/blog" element={<Blog />}></Route>
           <Route exact path="/blog/:id" element={<BlogDetail />}></Route>
-          <Route exact path="/flat/:slug" element={<FlatDetail />}></Route>
           <Route exact path="/login" element={<UserLogin isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />}></Route>
           <Route exact path="/register" element={<UserRegister />}></Route>
           <Route exact path="/error" element={<ServerError />}></Route>
           <Route exact path="/profile" element={<Profile />}></Route>
-        <Route exact path="/property" element={ <Property/> }></Route>
-        <Route exact path="/addProperty/:id" element={ <PropertyForm/>}></Route>
-        <Route exact path="/addImages/:id" element={ <ImageUpload/> }></Route>
+
+          <Route exact path="/flat/:id" element={<FlatDetail />}></Route>
+          <Route exact path="/property/add" element={<PropertyForm />}></Route>
+          <Route exact path="/property/edit/:id" element={<PropertyForm />}></Route>
         </Routes>
 
         <Footer />

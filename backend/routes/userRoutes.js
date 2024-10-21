@@ -1,10 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const controller = require('../controller/userController');
-
-
-
 const multer = require('multer');
+const authMiddleware = require('../util/authMiddleware');
+
 
 const storage = multer.memoryStorage();
 
@@ -14,19 +13,15 @@ const upload = multer({
 });
 
 
-
-
 router.post('/user',upload.single('avatar'),controller.addUser);
 
-router.get('/user/:userid',controller.getUserByUserId);
+router.get('/user/:userid',authMiddleware,controller.getUserByUserId);
 
 router.get('/users',controller.getAllUsers);
 
 router.post('/login',controller.userLogIn);   
 
-router.get('/login/:username',controller.getUserByUsername);   // Flutter 
-
-router.put('/user/:userid',controller.updateUser);
+router.put('/user/:userid',authMiddleware,upload.single('avatar'),controller.updateUser);
 
 router.delete('/user/:userid',controller.deleteUserById);
 

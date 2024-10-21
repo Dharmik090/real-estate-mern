@@ -1,8 +1,11 @@
 const mongoose = require('mongoose');
 const User = require('./User');
-const Images = require('./Images');
 
 const propertySchema = new mongoose.Schema({
+    title: {
+        type: String,
+        required: true
+    },
     description: {
         type: String,
         required: true
@@ -47,11 +50,10 @@ const propertySchema = new mongoose.Schema({
         type: Number,
         required: false
     },
-    // images: {
-    //     type: [String],
-    //     ref: 'Images',
-    //     required: false,
-    // },
+    images: {
+        type: [Buffer],
+        required: true,
+    },
     userid: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',

@@ -13,9 +13,9 @@ const addUser = async (req, res) => {
         avatar = req.file.buffer;
     }
     else {
-        const defaultImagePath = path.join(__dirname, '../uploads/default.jpeg'); 
+        const defaultImagePath = path.join(__dirname, '../uploads/default.jpeg');
         try {
-            avatar = fs.readFileSync(defaultImagePath); 
+            avatar = fs.readFileSync(defaultImagePath);
         } catch (error) {
             return res.status(500).json({ message: 'Could not load default avatar.' });
         }
@@ -46,7 +46,7 @@ const addUser = async (req, res) => {
 
 const userLogIn = async (req, res) => {
     const { email, password } = req.body;
-
+    
     try {
         const user = await User.findOne({ email });
         if (!user) {
@@ -55,7 +55,7 @@ const userLogIn = async (req, res) => {
 
         const validPassword = await bcrypt.compare(password, user.password);
         if (!validPassword) {
-            return res.status(400).json({ message: 'Invalid Password' });
+            return res.status(400).json({ message: 'Incorrect Password' });
         }
 
         const token = createSecretToken(user);
@@ -71,13 +71,15 @@ const getUserByUserId = async (req, res) => {
     const userid = req.params.userid;
 
     try {
-        // To get plain JS object form mogoose document
+        // To get plain JS object from mogoose document
         const user = await User.findById(userid).lean();
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
 
+
         user.avatar = `data:image/jpeg;base64,${user.avatar.toString('base64')}`; // Adjust MIME type if needed
+
         delete user.password;
         res.json(user);
     }
@@ -97,56 +99,60 @@ const getAllUsers = async (req, res) => {
         res.json(users);
     }
     catch (err) {
-        res.send("ERROR : " + err);
+        res.status(500).json({ message: 'Server Error : ' + err })
     }
 }
 
 
-// Flutter 
-const getUserByUsername = async (req, res) => {
-    const username = req.params.username;
+const updateUser = async (req, res) => {
+    const id = req.params.userid;
+
+
+    let avatar;
+    if (req.file) {
+        avatar = req.file.buffer;
+    }
+    else {
+        const defaultImagePath = path.join(__dirname, '../uploads/default.jpeg');
+        try {
+            avatar = fs.readFileSync(defaultImagePath);
+        } catch (error) {
+            return res.status(500).json({ message: 'Could not load default avatar.' });
+        }
+    }
 
     try {
-        const user = await User.find({ username: username });
-        res.status(200).send(user);
-    }
-    catch (err) {
-        res.send("ERROR : " + err)
-    }
-}
 
-const updateUser = async (req,res) => {
-      const id = req.params.userid;
-      
-      try{
-          const user = await User.FindByIdAndUpdate(id,req.body);
-          if(!user){
-            return res.status(404).json({ message :'User nor found'});
-          }
-          res.json(user);
-      }catch(e){
-        res.send("Error: "+err);
-      }
-}
+        const user = await User.updateOne({ _id: id }, { $set: { ...req.body, avatar }});
 
-const deleteUserById = async (req,res) => {
-    const id = req.params.userid;
-    try{
-        const user = await User.DeleteOne({_id:id});
-        if(!user){
-            return res.status(404).json({ message : `User with id ${id} not found` });
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
         }
-        res.json({message : `User deleted successfully`});
-    }catch(e){
-        res.send("Error : "+ e);
+        res.json({ message: 'User updated successfully' });
+    } catch (err) {
+        res.status(500).json({ message: 'Server Error : ' + err })
     }
-    
+}
+
+const deleteUserById = async (req, res) => {
+    const id = req.params.userid;
+    try {
+        const user = await User.DeleteOne({ _id: id });
+        if (!user) {
+            return res.status(404).json({ message: `User not found` });
+        }
+        res.json({ message: `User deleted successfully` });
+    } catch (err) {
+        res.status(500).json({ message: 'Server Error : ' + err })
+    }
+
 }
 
 module.exports = {
     addUser,
     getUserByUserId,
-    getUserByUsername,
     getAllUsers,
-    userLogIn
+    userLogIn,
+    updateUser,
+    deleteUserById
 }

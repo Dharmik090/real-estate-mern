@@ -1,22 +1,26 @@
 const Property = require('../models/Property');
 const User = require('../models/User');
-const jwt = require('jsonwebtoken');
+
 
 const addProperty = async (req, res) => {
     const userid = req.params.userid;
-    const { description, price, bhk, area, status, location, city, state, country, latitude, longtitude } = req.body;
-    console.log(userid);
+    const { title, description, price, bhk, area, status, location, city, state, country, latitude, longtitude } = req.body;
+
+    const images = req.files.map(file => file.buffer);
     try {
         const user = await User.findById(userid);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
 
-        const property = new Property({ description, price, bhk, area, status, location, city, state, country, latitude, longtitude, userid });
+        const property = new Property({ title, description, price, bhk, area, status, location, city, state, country, latitude, longtitude, images, userid });
 
         await property.save();
-        console.log("ddddddddd");
-        res.status(201).json({ message : 'Property created successfully'});
+
+        res.status(201).json({ message: 'Property created successfully' });
     }
     catch (err) {
-        res.status(500).json({ message : 'Server Error : ' + err});
+        res.status(500).json({ message: 'Server Error : ' + err });
     }
 }
 
@@ -24,12 +28,21 @@ const addProperty = async (req, res) => {
 const getAllProperties = async (req, res) => {
 
     try {
-        const properties = await Property.find().populate('userid');
+        const properties = await Property.find().lean();
 
-        res.json(properties);
+        if (!properties) {
+            return res.status(404).json({ message: 'Properties not found' });
+        }
+
+        const newProperties = properties.map(property => {
+            property.images = property.images.map(image => `data:image/jpeg;base64,${image.toString('base64')}`);
+            return property;
+        });
+
+        res.json(newProperties);
     }
     catch (err) {
-        res.status(500).json({ message : 'Server Error : ' + err});
+        res.status(500).json({ message: 'Server Error : ' + err });
     }
 }
 
@@ -38,62 +51,97 @@ const getPropertyById = async (req, res) => {
     const id = req.params.id;
 
     try {
-        const property = await Property.findById(id);
-        if(!property){
-            return res.status(404).json({ message : 'Property not found' });
+        const property = await Property.findById(id).lean();
+        if (!property) {
+            return res.status(404).json({ message: 'Property not found' });
         }
+
+        property.images = property.images.map(image => `data:image/jpeg;base64,${image.toString('base64')}`);
 
         res.json(property);
     }
     catch (err) {
-        res.status(500).json({ message : 'Server Error : ' + err});
+        res.status(500).json({ message: 'Server Error : ' + err });
     }
 }
 
 const getPropertyByUserId = async (req, res) => {
     const userid = req.params.userid;
-    
+
     try {
         const user = await User.findById(userid);
         if (!user) {
-            return res.status(404).json({ message : 'User not found' });
+            return res.status(404).json({ message: 'User not found' });
         }
 
         const properties = await Property.find({ userid: user._id });
-        res.json(properties);
+
+        const newProperties = properties.map(property => {
+            property.images = property.images.map(image =>
+                `data:image/jpeg;base64,${image.toString('base64')}`
+            );
+            return property;
+        });
+
+        res.json(newProperties);
     }
     catch (err) {
-        res.status(500).json({ message : 'Server Error : ' + err});
+        res.status(500).json({ message: 'Server Error : ' + err });
     }
 }
 
-const updateProperty = async (req,res) => {
+
+const getBestProperties = async (req, res) => {
+    try {
+        const properties = await Property.find({ price: { $lt: 10000000 } }).limit(6).lean();
+        if (!properties) {
+            return res.status(404).json({ message: 'Properties not found' });
+        }
+
+        const newProperties = properties.map(property => {
+            property.images = property.images.map(image =>
+                `data:image/jpeg;base64,${image.toString('base64')}`
+            );
+            return property;
+        });
+
+        res.json(newProperties);
+    }
+    catch (err) {
+        res.status(500).json({ message: 'Server Error : ' + err });
+    }
+}
+
+
+const updateProperty = async (req, res) => {
     const id = req.params.id;
-    try{
-        const property = await Property.findByIdAndUpdate(id, req.body, { new: true });
+
+    const images = req.files.map(file => file.buffer);
+    try {
+        const property = await Property.updateOne({ _id: id }, { $set: { ...req.body, images } });
+
         if (!property) {
-            res.status(404).send(`Property with ID ${id} not found`);
-        } else {
-            res.send(property);
+            return res.status(404).json('Property not found');
         }
-    }catch(e){
-        res.status(500).send('Error :'+e);
+
+        res.json({ message: 'Property updated successfully' });
+    } catch (err) {
+        res.status(500).json({ message: 'Server Error : ' + err });
     }
 }
 
-const deletePropertyById = async (req,res) => {
+const deletePropertyById = async (req, res) => {
     const id = req.params.id;
-   
-    try{
-        const property = await Property.deleteOne({_id:id});
-        if(!property){
-            res.status(404).send(`Property with ID ${id} not found`);
-            return;
+
+    try {
+        const property = await Property.deleteOne({ _id: id });
+        if (!property) {
+            return res.status(404).json('Property not found');
         }
-        
-        res.send(`Property with ID ${id} deleted successfully`);
-    }catch(err){
-        res.send('ERROR : ' + err);
+
+        res.json({ message: 'Property deleted successfully' });
+    } catch (err) {
+        res.status(500).json({ message: 'Server Error : ' + err });
     }
 }
 
@@ -101,5 +149,8 @@ module.exports = {
     addProperty,
     getAllProperties,
     getPropertyById,
-    getPropertyByUserId
+    getPropertyByUserId,
+    getBestProperties,
+    updateProperty,
+    deletePropertyById
 }
