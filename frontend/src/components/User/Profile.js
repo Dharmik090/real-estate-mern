@@ -1,39 +1,37 @@
 import { useEffect, useState } from "react";
-import userServices from "../services/userService";
-import propertyService from "../services/propertyService";
+import userServices from "../../services/userService";
+import propertyService from "../../services/propertyService";
 import { useNavigate } from "react-router-dom";
+import ConfirmDialog from "../ConfirmDialog";
 
 export default function Profile() {
-
     const navigator = useNavigate();
-
     const [firstname, setFirstname] = useState('');
     const [lastname, setLastname] = useState('');
     const [username, setUsername] = useState('');
     const [avatar, setAvatar] = useState(null);
-
     const [firstnameError, setFirstnameError] = useState('');
     const [lastnameError, setLastnameError] = useState('');
     const [usernameError, setUsernameError] = useState('');
-
     const [user, setUser] = useState({});
     const [properties, setProperties] = useState([]);
     const [isEditing, setIsEditing] = useState(false);
 
 
+    const [isConfirmOpen, setConfirmOpen] = useState(false);
+    const [propertyToDelete, setPropertyToDelete] = useState(null);
+
     const fetchData = async () => {
         const userId = localStorage.getItem('userId');
-
         const userResponse = await new userServices().getUserById(userId);
         setUser(userResponse.data);
 
         const propertiesResponse = await new propertyService().getPropertyByUserId(userId);
         setProperties(propertiesResponse.data);
-    }
+    };
 
     useEffect(() => {
         fetchData();
-
         setFirstname(user.firstname);
         setLastname(user.lastname);
         setUsername(user.username);
@@ -43,7 +41,6 @@ export default function Profile() {
     const handleEditClick = () => {
         setIsEditing(true);
     };
-
 
     const validateField = (e) => {
         const field = e.target.name;
@@ -57,32 +54,25 @@ export default function Profile() {
         if (field === 'firstname') {
             setFirstname(value);
             setFirstnameError(error);
-        }
-        else if (field === 'lastname') {
+        } else if (field === 'lastname') {
             setLastname(value);
             setLastnameError(error);
-        }
-        else if (field === 'username') {
+        } else if (field === 'username') {
             setUsername(value);
             setUsernameError(error);
-        }
-        else {
+        } else {
             setAvatar(e.target.files[0]);
         }
-
-    }
-
+    };
 
     const handleUpdateProfile = async () => {
         try {
             const userId = localStorage.getItem('userId');
-
             const formData = new FormData();
             formData.append('firstname', firstname);
             formData.append('lastname', lastname);
             formData.append('username', username);
             formData.append('avatar', avatar);
-
             await new userServices().updateUser(userId, formData);
             setIsEditing(false);
         } catch (err) {
@@ -90,10 +80,11 @@ export default function Profile() {
         }
     };
 
-    const handleDeleteProperty = async (propertyId) => {
+    const handleDeleteProperty = async () => {
         try {
-            const response = await new propertyService().deletePropertyById(propertyId);
-            await fetchData();
+            const response = await new propertyService().deletePropertyById(propertyToDelete);
+            setConfirmOpen(false); // Close the dialog
+            await fetchData(); // Refresh properties
         } catch (err) {
             console.log(err.response.data.message);
         }
@@ -138,7 +129,7 @@ export default function Profile() {
                                     </div>
 
                                     <div className="mb-4">
-                                        <label htmlFor="password" className="form-label" style={{ fontSize: '1.25rem' }}>Profile Picture</label>
+                                        <label htmlFor="avatar" className="form-label" style={{ fontSize: '1.25rem' }}>Profile Picture</label>
                                         <input type="file" className="form-control form-control-lg" id="avatar" name="avatar"
                                             onChange={validateField} onBlur={validateField} />
                                     </div>
@@ -161,11 +152,13 @@ export default function Profile() {
                             <div className="list-group-item m-1" key={property._id}>
                                 <h5>{property.title}</h5>
                                 <button className="btn btn-success m-1 mt-3" onClick={() => {
-                                    setIsEditing(isEditing);
-                                    navigator('/flat/' + property._id)
+                                    navigator('/flat/' + property._id);
                                 }}>View</button>
                                 <button className="btn btn-primary m-1 mt-3" onClick={() => navigator('/property/edit/' + property._id)}>Edit</button>
-                                <button className="btn btn-danger m-1 mt-3" onClick={() => handleDeleteProperty(property._id)}>Delete</button>
+                                <button className="btn btn-danger m-1 mt-3" onClick={() => {
+                                    setPropertyToDelete(property._id);
+                                    setConfirmOpen(true);
+                                }}>Delete</button>
                             </div>
                         )) : (
                             <p>No properties found.</p>
@@ -173,6 +166,15 @@ export default function Profile() {
                     </div>
                 </div>
             </div>
+
+            <ConfirmDialog
+                isOpen={isConfirmOpen}
+                onClose={() => setConfirmOpen(false)}
+                onConfirm={handleDeleteProperty}
+                message="Are you sure you want to delete this property?"
+                title="Confirm Delete"
+                btnText="Delete"
+            />
         </>
     );
 }

@@ -4,7 +4,7 @@ const User = require('../models/User');
 
 const addProperty = async (req, res) => {
     const userid = req.params.userid;
-    const { title, description, price, bhk, area, status, location, city, state, country, latitude, longtitude } = req.body;
+    const { title, description, price, bhk, area, status, location, city, state, country, latitude, longitude } = req.body;
 
     const images = req.files.map(file => file.buffer);
     try {
@@ -13,7 +13,7 @@ const addProperty = async (req, res) => {
             return res.status(404).json({ message: 'User not found' });
         }
 
-        const property = new Property({ title, description, price, bhk, area, status, location, city, state, country, latitude, longtitude, images, userid });
+        const property = new Property({ title, description, price, bhk, area, status, location, city, state, country, latitude, longitude, images, userid });
 
         await property.save();
 
@@ -93,7 +93,7 @@ const getPropertyByUserId = async (req, res) => {
 
 const getBestProperties = async (req, res) => {
     try {
-        const properties = await Property.find({ price: { $lt: 10000000 } }).limit(6).lean();
+        const properties = await Property.find({ price: { $lt: 100000000 } }).limit(2).lean();
         if (!properties) {
             return res.status(404).json({ message: 'Properties not found' });
         }
@@ -111,6 +111,29 @@ const getBestProperties = async (req, res) => {
         res.status(500).json({ message: 'Server Error : ' + err });
     }
 }
+
+
+const getRecentProperties = async (req, res) => {
+    try {
+        const properties = await Property.find().sort({ createdAt: 1 }).limit(3).lean();
+        if (!properties) {
+            return res.status(404).json({ message: 'Properties not found' });
+        }
+
+        const newProperties = properties.map(property => {
+            property.images = property.images.map(image =>
+                `data:image/jpeg;base64,${image.toString('base64')}`
+            );
+            return property;
+        });
+
+        res.json(newProperties);
+    }
+    catch (err) {
+        res.status(500).json({ message: 'Server Error : ' + err });
+    }
+}
+
 
 
 const updateProperty = async (req, res) => {
@@ -151,6 +174,7 @@ module.exports = {
     getPropertyById,
     getPropertyByUserId,
     getBestProperties,
+    getRecentProperties,
     updateProperty,
     deletePropertyById
 }

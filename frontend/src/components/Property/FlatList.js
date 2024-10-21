@@ -1,15 +1,15 @@
 import { React, useEffect, useState } from 'react'
 
-import Title from "./Title"
+import Title from "../Title"
 import FlatItem from "./FlatItem"
-import propertyService from '../services/propertyService';
+import propertyService from '../../services/propertyService';
 
 const FlatList = (props) => {
     const [propertyList, setPropertyList] = useState([]);
 
     const fetchData = async () => {
         const response = await new propertyService().getAllProperties();
-        let data = response.data.slice(0, 5)
+        let data = response.data.slice(0, 2)
 
         data.map(property => {
             property.images = property.images.map(image => {

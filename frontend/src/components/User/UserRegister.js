@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
-import userServices from '../services/userService';
+import userServices from '../../services/userService';
 import UserForm from './UserForm';
 
 
@@ -142,7 +142,7 @@ const UserRegister = () => {
 
     return (
         <>
-            <UserForm title="Register" inputFields={inputFields} handleSubmit={handleSubmit} />
+            <UserForm title="Register" inputFields={inputFields} handleSubmit={handleSubmit}  />
         </>
     );
 };

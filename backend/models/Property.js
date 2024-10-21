@@ -46,7 +46,7 @@ const propertySchema = new mongoose.Schema({
         type: Number,
         required: false
     },
-    longtitude: {
+    longitude: {
         type: Number,
         required: false
     },

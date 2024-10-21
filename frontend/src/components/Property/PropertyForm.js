@@ -1,7 +1,28 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate, useParams } from "react-router-dom";
-import propertyService from '../services/propertyService';
+import propertyService from '../../services/propertyService';
+import MapComponent from '../MapComponent';
+
+
+const getUserLocation = () => {
+    return new Promise((resolve, reject) => {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const { latitude, longitude } = position.coords;
+                    resolve({ latitude, longitude });
+                },
+                (error) => {
+                    reject(error);
+                }
+            );
+        } else {
+            reject(new Error("Geolocation is not supported by this browser."));
+        }
+    });
+};
+
 
 const PropertyForm = () => {
 
@@ -73,7 +94,6 @@ const PropertyForm = () => {
 
             if (id) {
                 const response = await new propertyService().updateProperty(id, formData);
-                // response.data.message
             }
             else {
                 const response = await new propertyService().addProperty(userId, formData);
@@ -259,13 +279,15 @@ const PropertyForm = () => {
                     </div>
 
                     <div className="mb-4">
-                        <label htmlFor="images" className="form-label">Profile Picture</label>
+                        <label htmlFor="images" className="form-label">Properties Picture</label>
                         <input type="file" className="form-control" id="images" name="images"
                             onChange={(e) => {
                                 const files = Array.from(e.target.files);
                                 setProperty({ ...property, [e.target.name]: files });
                             }} multiple />
                     </div>
+
+                    <MapComponent setProperty={setProperty} latitude={property.latitude} longitude={property.longitude}/>
 
                     <div className="row mt-5 d-flex justify-content-center">
                         <button type="submit" className="btn btn-primary w-25 m-2">{(id) ? 'Edit' : 'Add'} Property</button>

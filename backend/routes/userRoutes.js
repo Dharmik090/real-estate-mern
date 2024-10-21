@@ -15,7 +15,7 @@ const upload = multer({
 
 router.post('/user',upload.single('avatar'),controller.addUser);
 
-router.get('/user/:userid',authMiddleware,controller.getUserByUserId);
+router.get('/user/:userid',controller.getUserByUserId);
 
 router.get('/users',controller.getAllUsers);
 

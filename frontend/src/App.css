@@ -2,6 +2,7 @@
 @import "~react-image-gallery/styles/css/image-gallery.css";
 
 
+
 .slider-container {
   width: 50%; /* Ensures the slider container fits the parent */
   margin: 0 auto;
@@ -10,6 +11,38 @@
 
 .image-container {
   margin: 0 100px; /* Add margin for space between images */
+}
+
+
+.alert {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 15px;
+  border-radius: 5px;
+  z-index: 1000;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-width: 200px;
+  color: #fff;
+}
+
+.alert.success {
+  background-color: #4caf50; /* Green */
+}
+
+.alert.error {
+  background-color: #f44336; /* Red */
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  margin-left: 10px;
 }
 
 

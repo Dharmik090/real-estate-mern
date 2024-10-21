@@ -44,6 +44,13 @@ export default class propertyService extends Component {
         return axios.get(requestUrl);
     }
 
+
+    getRecentProperties(){
+        const requestUrl = this.URL + '/recent/property';
+        return axios.get(requestUrl);
+    }
+
+
     deletePropertyById(propertyId) {
         const requestUrl = this.URL + '/property/' + propertyId;
         const headers = {

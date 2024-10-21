@@ -1,13 +1,24 @@
 import { React, useState, useEffect } from "react"
 import { Link } from "react-router-dom"
+import ConfirmDialog from "./ConfirmDialog";
 
 const Header = (props) => {
 
     const [isLoggedIn,setIsLoggedIn] = useState(localStorage.getItem('userId'));
-    
+    const [isConfirmOpen, setConfirmOpen] = useState(false);
+
     useEffect(() => {
         setIsLoggedIn(localStorage.getItem('userId'));
-    })
+    });
+
+    const logoutClick = () => {
+        props.setIsLoggedIn(false);
+        setIsLoggedIn(false);
+        setConfirmOpen(false);
+        localStorage.setItem('userId', '');
+        localStorage.setItem('authToken', '');
+    }
+
     return (
         <div className="header">
             <div className="container">
@@ -17,7 +28,7 @@ const Header = (props) => {
                             <div className="d-flex align-items-center">
                                 <i className="fas fa-home"></i>
                                 <span className="ms-2">
-                                    EstateEase
+                                    EstatePrime
                                 </span>
                             </div>
                         </Link>
@@ -30,16 +41,8 @@ const Header = (props) => {
                                     <Link className="nav-link" to="/">Home</Link>
                                 </li>
                                 <li className="nav-item">
-                                    <Link className="nav-link" to="/blog">Blog</Link>
+                                    <Link className="nav-link" to="/properties">Properties</Link>
                                 </li>
-                                {/* <li className="nav-item">
-                                    <Link className="nav-link" to="#">Category <i className="fas fa-chevron-down"></i></Link>
-                                    <ul className="sub-ul">
-                                        <li><Link to="#">item</Link></li>
-                                        <li><Link to="#">item</Link></li>
-                                        <li><Link to="#">item</Link></li>
-                                    </ul>
-                                </li> */}
                                 {!isLoggedIn &&
                                     <li className="nav-item">
                                         <Link className="nav-link" to="/login">Register | Login</Link>
@@ -52,11 +55,7 @@ const Header = (props) => {
                                 }
                                 {isLoggedIn &&
                                     <li className="nav-item">
-                                        <Link className="nav-link" to="/" onClick={() => {
-                                            props.setIsLoggedIn(false);
-                                            localStorage.setItem('userId', '');
-                                            localStorage.setItem('authToken', '');
-                                        }}>Logout</Link>
+                                        <Link className="nav-link" to="/" onClick={() => setConfirmOpen(true)}>Logout</Link>
                                     </li>
                                 }
                             </ul>
@@ -64,6 +63,15 @@ const Header = (props) => {
                     </div>
                 </nav>
             </div>
+
+            <ConfirmDialog
+                isOpen={isConfirmOpen}
+                onClose={() => setConfirmOpen(false)}
+                onConfirm={logoutClick}
+                message="Are you sure you want to Logout?"
+                title="Confirm Logout"
+                btnText="Logout"
+            />
         </div>
     )
 }

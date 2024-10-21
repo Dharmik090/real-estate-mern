@@ -1,8 +1,8 @@
 import React, { Component, useEffect, useState } from "react";
 import Slider from "react-slick";
-import Title from "./Title"
+import Title from "../Title"
 import BestFlatItem from "./BestFlatItem"
-import propertyService from "../services/propertyService";
+import propertyService from "../../services/propertyService";
 
 export default function BestFlatList(props) {
 

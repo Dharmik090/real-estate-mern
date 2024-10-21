@@ -22,6 +22,8 @@ router.get('/property/:id',controller.getPropertyById);
 
 router.get('/best/property/',controller.getBestProperties);
 
+router.get('/recent/property/',controller.getRecentProperties);
+
 router.put('/property/:id',authMiddleware,upload.array('images',10),controller.updateProperty);
 
 router.delete('/property/:id',authMiddleware,controller.deletePropertyById);

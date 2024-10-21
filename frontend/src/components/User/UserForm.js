@@ -25,7 +25,11 @@ export default function UserForm(props) {
                                 <Link to="/register">Register here</Link>
                             </div>
                         }
-
+                        {props.title === "Send Email" &&
+                            <div className="mt-3 d-flex justify-content-left">
+                                <Link to="/mail">Send Mail</Link>
+                            </div>
+                        }
                     </form>
 
                 </div>
