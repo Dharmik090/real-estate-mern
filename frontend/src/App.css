@@ -1,6 +1,68 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500&display=swap'); 
 @import "~react-image-gallery/styles/css/image-gallery.css";
 
+
+
+.slider-container {
+  width: 50%; /* Ensures the slider container fits the parent */
+  margin: 0 auto;
+  height: 10rem /* Center the slider on the page */
+}
+
+.image-container {
+  margin: 0 100px; /* Add margin for space between images */
+}
+
+
+.alert {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 15px;
+  border-radius: 5px;
+  z-index: 1000;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-width: 200px;
+  color: #fff;
+}
+
+.alert.success {
+  background-color: #4caf50; /* Green */
+}
+
+.alert.error {
+  background-color: #f44336; /* Red */
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+
+
+
+.slider-container {
+  display: flex;
+  justify-content: center; /* Centers the slider contents */
+  align-items: center; /* Aligns items vertically if needed */
+}
+
+.slider-container img {
+  width: 80%; /* Adjust as needed to fit your design */
+  height: auto; /* Keep aspect ratio */
+  object-fit: cover; /* Ensure images cover the area */
+  border-radius: 8px; /* Rounded corners */
+}
+
+
+
 *{
   font-family: 'Montserrat', sans-serif;
 }

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
-import userServices from '../services/userService';
+import userServices from '../../services/userService';
 import UserForm from './UserForm';
 
 
@@ -10,6 +10,7 @@ const UserRegister = () => {
     const [email, setEmail] = useState('');
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [avatar, setAvatar] = useState(null);
 
     const [firstnameError, setFirstnameError] = useState('');
     const [lastnameError, setLastnameError] = useState('');
@@ -44,37 +45,48 @@ const UserRegister = () => {
             setUsername(value);
             setUsernameError(error);
         }
-        else {
+        else if (field === 'password') {
             setPassword(value);
             setPasswordError(error);
+        }
+        else {
+            setAvatar(e.target.files[0]);
         }
 
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
+        const formData = new FormData();
+        formData.append('firstname', firstname);
+        formData.append('lastname', lastname);
+        formData.append('username', username);
+        formData.append('email', email);
+        formData.append('password', password);
+        formData.append('avatar', avatar);
 
+        try {
+            const response = await new userServices().addUser(formData);
 
-        console.log(-1);
-        const user = {
-            firstname,
-            lastname,
-            username,
-            email,
-            password,
-        };
+            setFirstname('');
+            setLastname('');
+            setUsername('');
+            setEmail('');
+            setPassword('');
 
-        new userServices().addUser(user).then((response) => {
             navigator("/login");
-        }).catch((err) => {
-            console.log(err.response.data.message);
-        });
+        }
+        catch (err) {
+            setPassword('');
+            const message = err.response.data.message;
 
-        setFirstname('');
-        setLastname('');
-        setUsername('');
-        setEmail('');
-        setPassword('');
+            if (message === 'Email already exist') {
+                setEmailError(message);
+            }
+            else if (message === 'Username already exist') {
+                setUsernameError(message);
+            }
+        };
     };
 
     const inputFields = (
@@ -118,11 +130,20 @@ const UserRegister = () => {
                     onBlur={validateField} />
                 <div className="text-danger small" style={{ fontSize: '1rem' }}>{passwordError}</div>
             </div>
+
+            <div className="mb-4">
+                <label htmlFor="password" className="form-label" style={{ fontSize: '1.25rem' }}>Profile Picture</label>
+                <input type="file" className="form-control form-control-lg" id="avatar" name="avatar"
+                    onChange={validateField} onBlur={validateField} />
+                {/* <div className="text-danger small" style={{ fontSize: '1rem' }}>{}</div> */}
+            </div>
         </>
     );
 
     return (
-        <UserForm title="Register" inputFields={inputFields} handleSubmit={handleSubmit} />
+        <>
+            <UserForm title="Register" inputFields={inputFields} handleSubmit={handleSubmit}  />
+        </>
     );
 };
 

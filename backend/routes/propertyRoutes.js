@@ -1,21 +1,35 @@
 const express = require('express');
 const router = express.Router();
 const controller = require('../controller/propertyController');
-const controller2 = require('../controller/imageController');
 const authMiddleware = require('../util/authMiddleware');
+const multer = require('multer');
 
-router.post('/property/:userid',authMiddleware,controller.addProperty);
+const storage = multer.memoryStorage();
+
+const upload = multer({
+    storage: storage,
+    limits: { fileSize: 1000000 }, 
+});
+
+
+router.post('/property/:userid',authMiddleware,upload.array('images',10),controller.addProperty);
 
 router.get('/properties',controller.getAllProperties);
 
-router.get('/property/:userid',controller.getPropertyByUserId);
+router.get('/user/property/:userid',authMiddleware,controller.getPropertyByUserId);
 
-router.put('/property/:id',controller.updateProperty);
+router.get('/property/:id',controller.getPropertyById);
 
-router.delete('/property/:id',controller.deletePropertyById);
+router.get('/best/property/',controller.getBestProperties);
 
-router.post('/images/:id',controller2.uploadimage);
+router.get('/recent/property/',controller.getRecentProperties);
+
+router.put('/property/:id',authMiddleware,upload.array('images',10),controller.updateProperty);
+
+router.delete('/property/:id',authMiddleware,controller.deletePropertyById);
+
 
 module.exports = router;
+
 
 // router.get('/property/:id',controller.getPropertyById);

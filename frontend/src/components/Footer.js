@@ -8,7 +8,6 @@ const Footer = () => {
                     <div className="col-lg-3 col-md-6">
                         <i className="fas fa-home"></i>
                         <span className="footer-other-text d-block mt-3 mb-3">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua
                         </span>
                         <div className="footer-social">
                             <div className="footer-social-item"><i className="fab fa-facebook"></i></div>
