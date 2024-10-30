@@ -9,7 +9,7 @@ const FlatList = (props) => {
 
     const fetchData = async () => {
         const response = await new propertyService().getAllProperties();
-        let data = response.data.slice(0, 2)
+        let data = response.data.slice(0, 6)
 
         data.map(property => {
             property.images = property.images.map(image => {

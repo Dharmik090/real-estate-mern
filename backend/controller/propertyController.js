@@ -93,7 +93,7 @@ const getPropertyByUserId = async (req, res) => {
 
 const getBestProperties = async (req, res) => {
     try {
-        const properties = await Property.find({ price: { $lt: 100000000 } }).limit(2).lean();
+        const properties = await Property.find({ price: { $lt: 100000000 } }).limit(6).lean();
         if (!properties) {
             return res.status(404).json({ message: 'Properties not found' });
         }

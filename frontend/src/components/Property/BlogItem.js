@@ -5,7 +5,7 @@ const BlogItem = (props) => {
         <div className="col-lg-4">
             <div className="blog-item">
                 <div className="blog-img">
-                    <img src={props.property.images[0].original} alt="product" className="w-100" />
+                    <img src={props.property.images[0].original} alt="product" className="w-100" style={{ height: "14rem" }} />
                 </div>
                 <div className="blog-content">
                     <h2 className="blog-title"><Link to={`/flat/${props.property._id}`}>{props.property.title}</Link></h2>
@@ -13,8 +13,10 @@ const BlogItem = (props) => {
                         {/* <div className="blog-info-item"><i className="far fa-calendar-alt "></i><span></span></div>
                         <div className="blog-info-item"><i className="far fa-comments"></i><span>0 Comments</span></div> */}
                     </div>
-                    <div className="blog-text">
-                        {props.property.description}</div>
+
+                    <div className="blog-text"></div>
+                    {/* <div className="blog-text">
+                        {props.property.description}</div> */}
                 </div>
             </div>
         </div>

@@ -206,6 +206,7 @@
 }
 
 .item-image{
+  position: relative;
   overflow: hidden;  
 }
 .item-image img{
@@ -407,20 +408,27 @@ section {
 }
 .best-estate-state{
   color: white;
-  position: absolute;
-  top: 9px;
-  left: -38px;
+  /* position: relative; */
+  top: -225px;
+  left: -31px;
   transform: rotate(-45deg);
-  background: crimson;
   padding: 5px 35px;
-  font-size: 13px;
+  font-size: 13px
 }
+
+.best-estate-state-wrapper {
+  position: absolute;
+  top: 13px;
+  left: -34px;
+  /* Adjustments for wrapper to place label */
+}
+
 .best-estate-img-area{
   position: relative;
   overflow: hidden;
 }
-.bg-crimson{
-  background: crimson;
+.bg-red{
+  background: red;
 }
 .bg-green{
   background: #10a03c;

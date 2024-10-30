@@ -4,10 +4,22 @@ const BestFlatItem = (props) => {
 
         <div className="text-center col-lg-4 col-12 col-md-6 ">
             <div className="item">
-                <div className="best-estate-img-area">
+                {/* <div className="best-estate-img-area">
                     <img className="img-fluid" src={props.property.images[0].original} alt="flat" />
                     <div className={`best-estate-state ${props.property.status === "For Rent" ? "bg-green" : "bg-red"}`}>{props.property.status}</div>
+                </div> */}
+
+                <div className="item-image">
+                    <img className="img-fluid" src={props.property.images[0].original} alt="flat" />
+                    {/* <div className={`best-estate-state ${props.property.status === "For Rent" ? "bg-green" : "bg-red"}`}>{props.property.status}</div> */}
+                <div className="best-estate-state-wrapper">
+                    <div className={`best-estate-state ${props.property.status === "For Rent" ? "bg-green" : "bg-red"}`}>
+                        {props.property.status}
+                    </div>
                 </div>
+                </div>
+
+
                 <div className="item-description">
                     <div className="d-flex justify-content-between mb-3">
                         <span className="item-title">{props.property.title}</span>
