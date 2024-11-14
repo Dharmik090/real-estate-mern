@@ -25,29 +25,28 @@ A full-stack real estate application built with the MERN stack. It enables users
    git clone https://github.com/Dharmik090/real-estate-mern.git
 
 2. **Backend Setup**
-
-Navigate to the backend directory:
+Navigate to the backend directory
     ```bash
     cd real-estate-mern/backend
 
-Install the backend dependencies:<br>
+Install the backend dependencies
     ```bash
     npm install
 
 Change database url in /config/dbConnector.js
 
-Start the backend server:
+Start the backend server
     ```bash
     npm start
 
 3. **Frontend Setup**
 
-Open a new terminal and navigate to the client directory and install frontend dependencies:
+Open a new terminal and navigate to the client directory and install frontend dependencies
     ```bash
     cd ../frontend
     npm install
 
-Start the react application:
+Start the react application
     ```bash
     npm start
 
