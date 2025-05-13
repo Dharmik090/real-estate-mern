@@ -44,6 +44,7 @@ app.post("/send-mail", (req, res) => {
 
 });
 
+
 app.listen(5000, () => {
     console.log("Server running at : http://localhost:5000/");
 });
