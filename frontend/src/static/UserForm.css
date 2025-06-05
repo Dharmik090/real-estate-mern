@@ -1,0 +1,145 @@
+.user-form-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f8f9fa;
+    padding: 1rem;
+}
+
+.form-card {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+    width: 100%;
+    max-width: 500px;
+    position: relative;
+}
+
+.form-toggle {
+    display: flex;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid #e0e0e0;
+    margin-top: 2rem;
+
+}
+
+.toggle-btn {
+    flex: 1;
+    padding: 0.75rem;
+    text-align: center;
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #666;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.toggle-btn.active {
+    color: #1a1a2e;
+    font-weight: 600;
+    background-color: #f0f0f0;
+}
+
+.toggle-btn.active::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background-color: #1a1a2e;
+}
+
+.form-title {
+    font-size: 1.75rem;
+    color: #1a1a2e;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    font-weight: 600;
+}
+
+.form-submit {
+    margin-top: 1.5rem;
+    text-align: center;
+}
+
+.submit-btn {
+    padding: 0.75rem 1.5rem;
+    background-color: #1a1a2e;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 100%;
+    max-width: 200px;
+}
+
+.submit-btn:hover {
+    background-color: #16213E;
+}
+
+.form-footer {
+    margin-top: 1rem;
+    text-align: center;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.form-link {
+    color: #1a1a2e;
+    font-weight: 500;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.form-link:hover {
+    color: #4CAF50;
+}
+
+/* Input field styling */
+input {
+    width: 100%;
+    padding: 0.6rem;
+    /* Reduced from 0.75rem */
+    margin-bottom: 0.75rem;
+    /* Reduced from 1rem */
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    transition: border-color 0.3s ease;
+}
+
+/* Add this new selector for the form to reduce spacing */
+form {
+    margin-top: 0.5rem;
+    /* Adds slight reduction to top spacing */
+}
+
+
+input:focus {
+    outline: none;
+    border-color: #1a1a2e;
+}
+
+.back-btn {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    background: none;
+    border: none;
+    color: #666;
+    cursor: pointer;
+    font-size: 0.9rem;
+    padding: 0.5rem;
+    transition: all 0.3s ease;
+    z-index: 1;
+}
+
+.back-btn:hover {
+    color: #1a1a2e;
+    text-decoration: underline;
+}

@@ -1,14 +1,32 @@
+require('dotenv').config();
+
 const express = require('express');
-const DbConnector = require('./config/dbConnector');
-const userRoutes = require('./routes/userRoutes');
-const propertyRoutes = require('./routes/propertyRoutes')
-const app = express();
 const cors = require('cors');
-const path = require('path');
+const cookieParser = require('cookie-parser');
+const rateLimit = require('express-rate-limit');
 const nodeMailer = require('nodemailer');
 
-app.use(cors());
+const db = require('./config/db')
+const userRoutes = require('./routes/user.routes');
+const propertyRoutes = require('./routes/property.routes')
+
+const app = express();
+
+const corsOptions = {
+  origin: 'http://localhost:3000', // Your frontend URL
+  credentials: true, // Allow cookies
+  optionsSuccessStatus: 200 // For legacy browsers
+};
+
+app.use(cors(corsOptions));
+app.use(cookieParser());
 app.use(express.json());
+app.use('/', rateLimit({
+    windowMs: 15 * 60 * 1000,
+    limit: 1000,
+    message: "Too many requests, please try again later."
+}));
+
 app.use("/", userRoutes);
 app.use("/", propertyRoutes);
 app.post("/send-mail", (req, res) => {
@@ -44,7 +62,14 @@ app.post("/send-mail", (req, res) => {
 
 });
 
+app.use((err, req, res, next) => {
+    const status = err.statusCode || 500;
 
-app.listen(5000, () => {
-    console.log("Server running at : http://localhost:5000/");
+    if (status === 500)
+        err.message = 'Server error: ' + err.message
+    res.status(status).json({ success: false, message: err.message });
+});
+
+app.listen(process.env.PORT || 5000, () => {
+    console.log(`Server running at : http://localhost:${process.env.PORT || 5000}`);
 });

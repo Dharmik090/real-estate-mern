@@ -1,15 +1,15 @@
-const Title = (props) => {
-    const {title,description}=props
-    return (
-        <div className="row">
-            <div className="col-lg-6 mx-auto">
-                <div className="title-area text-center">
-                    <h2 className="title">{title}</h2>
-                    <p className="title-description">{description}</p>
-                </div>
-            </div>
-        </div>
-    )
-}
+import React from 'react';
+import '../static/Title.css';
 
-export default Title
+const Title = ({ title, description }) => {
+  return (
+    <div className="title-container">
+      <div className="title-divider">
+        <span className="title-tag">{title}</span>
+      </div>
+      <p className="section-description">{description}</p>
+    </div>
+  );
+};
+
+export default Title;

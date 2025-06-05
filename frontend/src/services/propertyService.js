@@ -1,75 +1,85 @@
-import { Component } from 'react';
 import axios from 'axios';
+import { Component } from 'react';
+import { getUserIdFromToken } from './auth'; // We'll create this utility
 
-export default class propertyService extends Component {
-    constructor(){
+export default class PropertyService extends Component {
+    constructor() {
         super();
-        this.URL = 'http://localhost:5000';
+        this.api = axios.create({
+            baseURL: 'http://localhost:5000',
+            withCredentials: true, // Ensures cookies are sent with requests
+        });
     }
 
-    getAllProperties(){
-        const requestUrl = this.URL + '/properties';
-        return axios.get(requestUrl);
+    getAllProperties(page, limit) {
+        return this.api.get(`/properties?page=${page}&limit=${limit}`);
     }
 
-    getPropertyById(id){
-        const requestUrl = this.URL + '/property/' + id;
-        return axios.get(requestUrl);
+    getPropertyById(id) {
+        return this.api.get(`/properties/${id}`);
     }
 
-    addProperty(userid,property){
-        const requestUrl = this.URL + '/property/' + userid;
-        const headers = {
-            'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
-            'Accept': 'application/json',
-            'Content-Type': 'multipart/form-data',
+    async addProperty(property) {
+        try {
+            const response = await this.api.post('/properties', property, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+
+            return response.data;
+        } catch (error) {
+            this.handleAuthError(error);
+            throw error;
         }
-
-        return axios.post(requestUrl, property, { headers });
     }
 
-    getPropertyByUserId(userid){
-        const requestUrl = this.URL + '/user/property/' + userid;
-        const headers = {
-            'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
+    async getPropertyByUserId() {
+        try {
+            const response = await this.api.get(`/users/properties`);
+            return response.data;
+        } catch (error) {
+            this.handleAuthError(error);
+            throw error;
         }
-
-        return axios.get(requestUrl, { headers });
     }
 
-    getBestProperties(){
-        const requestUrl = this.URL + '/best/property';
-        return axios.get(requestUrl);
+    getBestProperties() {
+        return this.api.get('/properties/best');
     }
 
-
-    getRecentProperties(){
-        const requestUrl = this.URL + '/recent/property';
-        return axios.get(requestUrl);
+    getRecentProperties() {
+        return this.api.get('/properties/recent');
     }
 
-
-    deletePropertyById(propertyId) {
-        const requestUrl = this.URL + '/property/' + propertyId;
-        const headers = {
-            'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+    async deletePropertyById(propertyId) {
+        try {
+            const response = await this.api.delete(`/properties/${propertyId}`);
+            return response.data;
+        } catch (error) {
+            this.handleAuthError(error);
+            throw error;
         }
-
-        return axios.delete(requestUrl, { headers });
     }
 
-
-    updateProperty(propertyId, property) {
-        const requestUrl = this.URL + '/property/' + propertyId;
-        const headers = {
-            'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
-            'Accept': 'application/json',
-            'Content-Type': 'multipart/form-data'
-        };
-
-        return axios.put(requestUrl, property, { headers })
+    async updateProperty(propertyId, property) {
+        try {
+            const response = await this.api.put(`/properties/${propertyId}`, property, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+            return response.data;
+        } catch (error) {
+            this.handleAuthError(error);
+            throw error;
+        }
     }
 
+    handleAuthError(error) {
+        if (error.response?.status === 401) {
+            // Token expired or invalid
+            window.location.href = '/login';
+        }
+    }
 }

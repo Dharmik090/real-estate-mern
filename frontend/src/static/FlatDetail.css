@@ -1,0 +1,376 @@
+/* Base Container */
+.flat-detail-container {
+    background-color: #f8f9fa;
+    min-height: 100vh;
+}
+
+/* Add these styles for the slider arrows */
+.slick-prev, .slick-next {
+    width: 40px;
+    height: 40px;
+    z-index: 1;
+    background-color: rgba(255, 255, 255, 0.9) !important;
+    border-radius: 50%;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+.slick-prev:hover, .slick-next:hover {
+    background-color: white !important;
+}
+
+.slick-prev:before, .slick-next:before {
+    color: #1a1a2e !important;
+    font-size: 20px !important;
+    opacity: 1 !important;
+    font-family: 'Font Awesome 5 Free' !important;
+    font-weight: 900 !important;
+}
+
+.slick-prev:before {
+    content: '\f053' !important;
+}
+
+.slick-next:before {
+    content: '\f054' !important;
+}
+
+/* Update the header styles */
+.flat-detail-header {
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    padding: 1.5rem 0;
+    color: white;
+    width: 100%;
+    max-width: 1140px;
+    margin: 0 auto;
+    border-radius: 8px 8px 0 0;
+    position: relative;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.flat-detail-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 3px;
+    background: #4CAF50;
+}
+
+.detail-page-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin: 0;
+    text-align: center;
+    letter-spacing: 0.5px;
+    position: relative;
+    padding-bottom: 0.5rem;
+}
+
+/* Update property-header to connect with flat-detail-header */
+.property-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: white;
+    border-radius: 0 0 8px 8px;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+    width: 100%;
+    max-width: 1140px;
+    margin: 0 auto 2rem;
+    border-top: none;
+}
+
+.detail-page-title {
+    font-size: 2rem;
+    font-weight: 600;
+    margin: 0;
+    text-align: center;
+}
+
+/* Main Content */
+.detail-content {
+    padding: 2rem 0;
+}
+
+/* Property Header */
+.property-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.property-title {
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: #1a1a2e;
+    margin-bottom: 0.5rem;
+}
+
+.property-location {
+    font-size: 1rem;
+    color: #666;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.property-price {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #4CAF50;
+}
+
+/* Image Slider */
+.property-slider {
+    margin-bottom: 3rem;
+}
+
+.slider-image-container {
+    padding: 0 10px;
+}
+
+.property-main-image {
+    width: 100%;
+    height: 500px;
+    object-fit: cover;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Property Detail Grid */
+.property-detail-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 2rem;
+}
+
+/* Main Content */
+.detail-section {
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.section-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #1a1a2e;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #eee;
+}
+
+.section-content {
+    color: #555;
+    line-height: 1.6;
+}
+
+.property-features {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.feature-item {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.feature-label {
+    font-weight: 600;
+    color: #1a1a2e;
+}
+
+.feature-value {
+    color: #555;
+}
+
+.map-container {
+    height: 300px;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+/* Action Buttons */
+.action-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.primary-btn {
+    padding: 0.75rem 1.5rem;
+    background-color: #1a1a2e;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-align: center;
+}
+
+.primary-btn:hover {
+    background-color: #16213E;
+}
+
+.primary-btn.outline {
+    background-color: transparent;
+    border: 1px solid #1a1a2e;
+    color: #1a1a2e;
+}
+
+.primary-btn.outline:hover {
+    background-color: #f0f0f0;
+}
+
+/* Sidebar */
+.property-sidebar {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    align-self: flex-start;
+    position: sticky;
+    top: 1rem;
+}
+
+.sidebar-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #1a1a2e;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #eee;
+}
+
+.recent-properties {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.recent-property-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.75rem;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+    text-decoration: none;
+}
+
+.recent-property-item:hover {
+    background-color: #f5f5f5;
+}
+
+.recent-property-image {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.recent-property-title {
+    font-size: 0.9rem;
+    color: #333;
+    font-weight: 500;
+}
+
+/* Responsive Design */
+@media (max-width: 992px) {
+    .property-detail-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .property-sidebar {
+        position: static;
+    }
+}
+
+@media (max-width: 768px) {
+    .property-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+    
+    .property-main-image {
+        height: 300px;
+    }
+    
+    .property-features {
+        grid-template-columns: 1fr;
+    }
+    
+    .action-buttons {
+        flex-direction: column;
+    }
+}
+
+
+
+/* Map container styling */
+.map-container {
+    position: relative;
+    height: 400px;
+    width: 100%;
+    border-radius: 8px;
+    overflow: hidden;
+    z-index: 1; /* Ensure the container has a stacking context */
+}
+
+/* Leaflet map styling */
+#map {
+    height: 100%;
+    width: 100%;
+    position: relative;
+    z-index: 1;
+}
+
+/* Leaflet control styling */
+.leaflet-top, .leaflet-bottom {
+    z-index: 2; /* Slightly higher than the map but contained within the component */
+}
+
+/* Leaflet control buttons */
+.leaflet-control-zoom {
+    border: none;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.leaflet-control-zoom-in,
+.leaflet-control-zoom-out {
+    background-color: white;
+    color: #333;
+    border-bottom: 1px solid #eee;
+    transition: all 0.2s ease;
+}
+
+.leaflet-control-zoom-in:hover,
+.leaflet-control-zoom-out:hover {
+    background-color: #f8f9fa;
+}
+
+/* Ensure the map doesn't interfere with other elements */
+.flat-detail-container {
+    position: relative;
+}
+
+.detail-content {
+    position: relative;
+    z-index: 1;
+}
