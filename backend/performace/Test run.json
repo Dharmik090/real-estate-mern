@@ -1,0 +1,330 @@
+{
+	"id": "9e0e39c8-6c4c-4319-8464-19edba742b95",
+	"name": "MERN auto API test",
+	"timestamp": "2025-05-13T07:42:17.090Z",
+	"collection_id": "33684947-116b60a7-fe2e-4c53-8d28-8d942b9a399a",
+	"folder_id": 0,
+	"environment_id": "33684947-827017e8-fbd4-4148-bee7-855a8bc0fa50",
+	"totalPass": 0,
+	"delay": 0,
+	"persist": true,
+	"status": "finished",
+	"startedAt": "2025-05-13T07:42:15.359Z",
+	"totalFail": 0,
+	"results": [
+		{
+			"id": "098e7b11-f29c-43d3-b8dd-3dd036270437",
+			"name": "User Registration",
+			"url": "http://localhost:5000/users",
+			"time": 106,
+			"responseCode": {
+				"code": 201,
+				"name": "Created"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				106
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "770e5df8-6eb9-4e35-8b49-70562a463ade",
+			"name": "User Login",
+			"url": "http://localhost:5000/login",
+			"time": 70,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				70
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "7a33f9c2-46eb-40f4-9126-0f06bfa7d0b3",
+			"name": "Get All users",
+			"url": "http://localhost:5000/users",
+			"time": 7,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				7
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "cbb5265e-56e6-49c1-8090-b1e70bce65b5",
+			"name": "Get user by user id",
+			"url": "http://localhost:5000/users/6822f7d80ec0f8680740127d",
+			"time": 6,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				6
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "6db87323-d032-4c05-a60b-b191642d4422",
+			"name": "Update user",
+			"url": "http://localhost:5000/users",
+			"time": 8,
+			"responseCode": {
+				"code": 204,
+				"name": "No Content"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				8
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "602416e8-a43a-4371-86a4-3bc40695baec",
+			"name": "Add property",
+			"url": "http://localhost:5000/properties",
+			"time": 12,
+			"responseCode": {
+				"code": 201,
+				"name": "Created"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				12
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "40d2a86a-d7dc-47e3-bfca-dc1f51e7127e",
+			"name": "Get all properties",
+			"url": "http://localhost:5000/properties",
+			"time": 4,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				4
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "0475c8df-9922-4aac-b6d0-159bd86ec7c5",
+			"name": "Get recent properties",
+			"url": "http://localhost:5000/properties/recent",
+			"time": 6,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				6
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "ccdf8782-e87e-4a37-86fc-1c4f54cdea5f",
+			"name": "Get best properties",
+			"url": "http://localhost:5000/properties/best",
+			"time": 5,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				5
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "b40d01fa-6183-443b-9683-5d807f33b624",
+			"name": "Get property by property id",
+			"url": "http://localhost:5000/properties/6822f7d80ec0f86807401284",
+			"time": 5,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				5
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "eea3f566-b34c-4a72-9e97-6355d4783f35",
+			"name": "Get properties by user id",
+			"url": "http://localhost:5000/users/6822f7d80ec0f8680740127d/properties",
+			"time": 7,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				7
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "2fdeaa49-32a8-414d-94b3-68a459b0d6fc",
+			"name": "Update property by property id",
+			"url": "http://localhost:5000/properties/6822f7d80ec0f86807401284",
+			"time": 7,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				7
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "b8ae47f2-6b58-4731-90e6-e987abde9117",
+			"name": "Delete property by property id",
+			"url": "http://localhost:5000/properties/6822f7d80ec0f86807401284",
+			"time": 5,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				5
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "5b7348e3-0f79-4cf4-80d6-4fec27f5699e",
+			"name": "Delete user by user id",
+			"url": "http://localhost:5000/users/6822f7d80ec0f8680740127d",
+			"time": 8,
+			"responseCode": {
+				"code": 204,
+				"name": "No Content"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				8
+			],
+			"allTests": [
+				{}
+			]
+		}
+	],
+	"count": 1,
+	"totalTime": 256,
+	"collection": {
+		"requests": [
+			{
+				"id": "098e7b11-f29c-43d3-b8dd-3dd036270437",
+				"method": "POST"
+			},
+			{
+				"id": "770e5df8-6eb9-4e35-8b49-70562a463ade",
+				"method": "POST"
+			},
+			{
+				"id": "7a33f9c2-46eb-40f4-9126-0f06bfa7d0b3",
+				"method": "GET"
+			},
+			{
+				"id": "cbb5265e-56e6-49c1-8090-b1e70bce65b5",
+				"method": "GET"
+			},
+			{
+				"id": "6db87323-d032-4c05-a60b-b191642d4422",
+				"method": "PUT"
+			},
+			{
+				"id": "602416e8-a43a-4371-86a4-3bc40695baec",
+				"method": "POST"
+			},
+			{
+				"id": "40d2a86a-d7dc-47e3-bfca-dc1f51e7127e",
+				"method": "GET"
+			},
+			{
+				"id": "0475c8df-9922-4aac-b6d0-159bd86ec7c5",
+				"method": "GET"
+			},
+			{
+				"id": "ccdf8782-e87e-4a37-86fc-1c4f54cdea5f",
+				"method": "GET"
+			},
+			{
+				"id": "b40d01fa-6183-443b-9683-5d807f33b624",
+				"method": "GET"
+			},
+			{
+				"id": "eea3f566-b34c-4a72-9e97-6355d4783f35",
+				"method": "GET"
+			},
+			{
+				"id": "2fdeaa49-32a8-414d-94b3-68a459b0d6fc",
+				"method": "PUT"
+			},
+			{
+				"id": "b8ae47f2-6b58-4731-90e6-e987abde9117",
+				"method": "DELETE"
+			},
+			{
+				"id": "5b7348e3-0f79-4cf4-80d6-4fec27f5699e",
+				"method": "DELETE"
+			}
+		]
+	}
+}

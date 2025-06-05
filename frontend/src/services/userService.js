@@ -1,45 +1,63 @@
-import { Component } from 'react';
 import axios from 'axios';
+import { Component } from 'react';
+import { getUserIdFromToken } from './auth'; // We'll create this utility
 
-export default class userServices extends Component {
+export default class UserService extends Component {
     constructor() {
         super();
-        this.URL = 'http://localhost:5000';
+        this.api = axios.create({
+            baseURL: 'http://localhost:5000',
+            withCredentials: true, // Ensures cookies are sent with requests
+        });;
     }
 
     addUser(user) {
-        const requestUrl = this.URL + '/user';
-        const headers = {
-            'Content-Type': 'multipart/form-data'
-        };
-
-        return axios.post(requestUrl, user, { headers });
+        return this.api.post('/users', user, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        });
     }
 
     userLogIn(user) {
-        const requestUrl = this.URL + '/login';
-        return axios.post(requestUrl, user);
+        return this.api.post('/login', user);
     }
 
-    getUserById(userid) {
-        const requestUrl = this.URL + `/user/${userid}`;
-        const headers = {
-            'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-        }
+    async getProfile() {
+        // const userId = await getUserIdFromToken();
 
-        return axios.get(requestUrl, { headers });
+        // if (!userId) {
+        //     throw new Error('User not authenticated');
+        // }
+
+        try {
+            // const response = await this.api.get(`/users/${userId}`);
+            const response = await this.api.get(`/users`);
+            return response.data;
+        } catch (error) {
+            this.handleAuthError(error);
+            throw error;
+        }
     }
 
-    updateUser(userid, user) {
-        const requestUrl = this.URL + `/user/${userid}`;
-        const headers = {
-            'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
-            'Accept': 'application/json',
-            'Content-Type': 'multipart/form-data'
+    async updateProfile(user) {
+        try {
+            const response = await this.api.put('/users', user, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+            return response.data;
+        } catch (error) {
+            this.handleAuthError(error);
+            throw error;
         }
+    }
 
-        return axios.put(requestUrl, user, { headers });
+    handleAuthError(error) {
+        if (error.response?.status === 401) {
+            // Token expired or invalid
+            window.location.href = '/login';
+        }
     }
 }

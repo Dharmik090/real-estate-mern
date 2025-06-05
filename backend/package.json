@@ -1,16 +1,25 @@
 {
   "dependencies": {
+    "@faker-js/faker": "^9.7.0",
+    "axios": "^1.9.0",
     "backend": "file:",
     "bcryptjs": "^2.4.3",
     "connect-mongodb-session": "^5.0.0",
+    "cookie-parser": "^1.4.7",
+    "cookies-parser": "^1.2.0",
     "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
     "express": "^4.21.0",
+    "express-rate-limit": "^7.5.0",
     "express-session": "^1.18.1",
+    "ioredis": "^5.6.1",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.5.4",
+    "mongoose": "^8.14.2",
     "multer": "^1.4.5-lts.1",
     "nodemailer": "^6.9.15",
-    "nodemon": "^3.1.4"
+    "nodemon": "^3.1.4",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1"
   },
   "name": "backend",
   "version": "1.0.0",
@@ -22,5 +31,8 @@
   "author": "",
   "license": "ISC",
   "keywords": [],
-  "description": ""
+  "description": "",
+  "devDependencies": {
+    "faker": "^5.5.3"
+  }
 }

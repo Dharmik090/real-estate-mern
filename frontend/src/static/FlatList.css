@@ -1,0 +1,61 @@
+.flat-section {
+    padding: 3rem 0;
+    background-color: #f8f9fa;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+.property-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+@media (max-width: 768px) {
+    .property-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .best-flat-section {
+        padding: 1.5rem 0;
+    }
+}
+
+/* Section divider styles */
+.section-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 2rem 0;
+  padding: 0 1rem;
+}
+
+.divider-line {
+  flex: 1;
+  height: 1px;
+  background-color: #e0e0e0;
+}
+
+.divider-text {
+  padding: 0 1.5rem;
+  color: #666;
+  font-weight: 500;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Different color for best price divider */
+.best-price-divider .divider-text {
+  color: #4CAF50;
+}
+
+.best-price-divider .divider-line {
+  background-color: rgba(76, 175, 80, 0.2);
+}
