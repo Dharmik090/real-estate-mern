@@ -27,7 +27,7 @@ export default class UserService extends Component {
     userValidate() {
         return this.api.get('/validate', {
             withCredentials: true
-        }).data;
+        });
     }
 
     userLogout() {

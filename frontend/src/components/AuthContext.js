@@ -16,6 +16,7 @@ export const AuthProvider = ({ children }) => {
     const validateSession = async () => {
         try {
             const response   = await new userService().userValidate();
+            console.log(response)
             setAuthState({
                 isLoggedIn: response.valid,
                 user: response.user,
