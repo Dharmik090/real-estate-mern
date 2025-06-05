@@ -6,7 +6,8 @@ export default class UserService extends Component {
     constructor() {
         super();
         this.api = axios.create({
-            baseURL: 'http://localhost:5000',
+            // baseURL: 'http://localhost:5000',
+            baseURL: 'https://real-estate-mern-backend-7iui.onrender.com',
             withCredentials: true, // Ensures cookies are sent with requests
         });;
     }
