@@ -1,6 +1,8 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import userService from '../services/userService';
+
 
 const AuthContext = createContext();
 
@@ -13,12 +15,10 @@ export const AuthProvider = ({ children }) => {
 
     const validateSession = async () => {
         try {
-            const response   = await axios.get('http://localhost:5000/validate', {
-                withCredentials: true
-            });
+            const response   = await new userService().userValidate();
             setAuthState({
-                isLoggedIn: response.data.valid,
-                user: response.data.user,
+                isLoggedIn: response.valid,
+                user: response.user,
                 loading: false
             });
         } catch (error) {
@@ -32,9 +32,7 @@ export const AuthProvider = ({ children }) => {
 
     const login = async (credentials) => {
         try {
-            await axios.post('http://localhost:5000/login', credentials, {
-                withCredentials: true
-            });
+            await new userService().userLogIn(credentials);
             await validateSession();
             return true;
         } catch (error) {
@@ -44,9 +42,7 @@ export const AuthProvider = ({ children }) => {
 
     const logout = async () => {
         try {
-            await axios.post('http://localhost:5000/logout', {}, {
-                withCredentials: true
-            });
+            await new userService().userLogout();
             setAuthState({
                 isLoggedIn: false,
                 user: null,

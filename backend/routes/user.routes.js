@@ -32,7 +32,7 @@ router.get('/validate', authMiddleware, (req, res) => {
     res.json({ valid: true, user: req.user }); // Optional: Return user data
 });
 
-router.post('/logout', (req, res) => {
+router.post('/logout', authMiddleware, (req, res) => {
     res.clearCookie('authToken'); // Remove the HTTP-only cookie
     res.json({ success: true });
 });

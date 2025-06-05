@@ -21,8 +21,22 @@ export default class UserService extends Component {
     }
 
     userLogIn(user) {
-        return this.api.post('/login', user);
+        return this.api.post('/login', user).data;
     }
+    
+    userValidate() {
+        return this.api.get('/validate', {
+            withCredentials: true
+        }).data;
+    }
+
+    userLogout() {
+        return this.api.post('/logout', {
+            withCredentials: true
+        }).data;
+    }
+
+
 
     async getProfile() {
         // const userId = await getUserIdFromToken();
