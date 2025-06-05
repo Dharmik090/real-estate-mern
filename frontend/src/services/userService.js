@@ -21,13 +21,12 @@ export default class UserService extends Component {
     }
 
     userLogIn(user) {
-        return this.api.post('/login', user).data;
+        return this.api.post('/login', user);
     }
     
     userValidate() {
-        return this.api.get('/validate', {
-            withCredentials: true
-        });
+        const response = this.api.get('/validate')
+        return response;
     }
 
     userLogout() {
