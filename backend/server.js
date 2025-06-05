@@ -13,7 +13,8 @@ const propertyRoutes = require('./routes/property.routes')
 const app = express();
 
 const corsOptions = {
-  origin: 'http://localhost:3000', // Your frontend URL
+  origin: 'https://real-estate-mern-frontend-k5v3.onrender.com', // Your frontend URL
+//   origin: 'http://localhost:3000', // Your frontend URL
   credentials: true, // Allow cookies
   optionsSuccessStatus: 200 // For legacy browsers
 };
