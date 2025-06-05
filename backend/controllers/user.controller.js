@@ -30,7 +30,8 @@ const userLogIn = async (req, res, next) => {
             secure: true,      // Only sent over HTTPS
             // sameSite: 'strict', // Prevents CSRF
             sameSite: 'None', // for render
-            maxAge: 3600000    // 1 hour expiry (in ms)
+            maxAge: 3600000,  // 1 hour expiry (in ms)
+            domain: '.onrender.com'
         });
 
         res.json({ token });
