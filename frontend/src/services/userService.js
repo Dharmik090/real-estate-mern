@@ -30,7 +30,7 @@ export default class UserService extends Component {
     }
 
     userLogout() {
-        return this.api.post('/logout', {
+        return this.api.post('/logout', {}, {
             withCredentials: true
         }).data;
     }
