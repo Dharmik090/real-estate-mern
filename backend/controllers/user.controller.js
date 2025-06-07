@@ -33,7 +33,7 @@ const userLogIn = async (req, res, next) => {
             maxAge: 3600000,  // 1 hour expiry (in ms)
             domain: '.onrender.com'
         });
-
+        
         res.json({ token });
     }
     catch (err) {
