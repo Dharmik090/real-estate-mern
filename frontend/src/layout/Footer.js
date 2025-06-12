@@ -4,7 +4,7 @@ import '../static/Footer.css';
 const Footer = () => {
     return (
         <footer className="footer-section">
-            <div className="container footer-container">
+            {/* <div className="container footer-container">
                 <div className="footer-column">
                     <div className="footer-brand">
                         <i className="fas fa-home"></i>
@@ -30,7 +30,7 @@ const Footer = () => {
                     </ul>
                 </div>
 
-                {/* <div className="footer-column">
+                <div className="footer-column">
                     <h4 className="footer-title">Categories</h4>
                     <ul className="footer-links">
                         <li><a href="#">Category 1</a></li>
@@ -38,7 +38,7 @@ const Footer = () => {
                         <li><a href="#">Category 3</a></li>
                         <li><a href="#">Category 4</a></li>
                     </ul>
-                </div> */}
+                </div>
 
                 <div className="footer-column">
                     <h4 className="footer-title">Contact</h4>
@@ -49,10 +49,10 @@ const Footer = () => {
                         <li><i className="fas fa-phone-alt"></i> 0500 000 00 00</li>
                     </ul>
                 </div>
-            </div>
+            </div> */}
 
             <div className="footer-bottom">
-                <p>&copy; {new Date().getFullYear()} EstatePrime. All rights reserved.</p>
+                <p className="footer-text">&copy; {new Date().getFullYear()} EstatePrime. All rights reserved.</p>
             </div>
         </footer>
     );

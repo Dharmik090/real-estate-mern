@@ -6,6 +6,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useAuth } from "../components/AuthContext";
 
 export default function UserLogin() {
+    const [isProcessing, setIsProcessing] = useState(false); // Add this line
+
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [emailError, setEmailError] = useState('');
@@ -32,10 +34,10 @@ export default function UserLogin() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        
+
         setEmailError('');
         setPasswordError('');
-        
+
         let isValid = true;
         if (!email) {
             setEmailError('Email is Required');
@@ -47,28 +49,23 @@ export default function UserLogin() {
         }
         if (!isValid) return;
 
-        const success = await login({ email, password });
-        if (success) {
+        setIsProcessing(true);
+        const response = await login({ email, password });
+
+        if (response.success) {
             toast.success('Login successful! Redirecting...', {
-                position: "top-center",
                 autoClose: 2000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
             });
+
+            setIsProcessing(false);
             setTimeout(() => navigate('/'), 2000);
         } else {
-            toast.error('Login failed. Please check your credentials.', {
-                position: "top-center",
-                autoClose: 3000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-            });
+            if (response.message === 'Email does not exist')
+                setEmailError(response.message);
+            else if (response.message === 'Incorrect Password')
+                setPasswordError(response.message);
+
+            setIsProcessing(false);
         }
     };
 
@@ -94,7 +91,13 @@ export default function UserLogin() {
 
     return (
         <>
-            <UserForm title="Login" inputFields={inputFields} handleSubmit={handleSubmit} />
+            <UserForm
+                title="Login"
+                inputFields={inputFields}
+                handleSubmit={handleSubmit}
+                isProcessing={isProcessing} 
+                setIsProcessing={setIsProcessing}
+            />
         </>
     );
 }

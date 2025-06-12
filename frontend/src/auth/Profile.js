@@ -1,13 +1,12 @@
-// Update in backend prints -2, not in database
-
-
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import userServices from "../services/userService";
 import propertyService from "../services/propertyService";
 import ConfirmDialog from "../components/ConfirmDialog";
 import { toast } from 'react-toastify';
+import Loader from '../components/Loader'
 import 'react-toastify/dist/ReactToastify.css';
+import '../static/Profile.css'
 
 export default function Profile() {
     const navigate = useNavigate();
@@ -30,45 +29,62 @@ export default function Profile() {
         lastname: '',
         username: ''
     });
+
     const [properties, setProperties] = useState([]);
     const [isEditing, setIsEditing] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [isConfirmOpen, setConfirmOpen] = useState(false);
     const [propertyToDelete, setPropertyToDelete] = useState(null);
+    const [isUpdating, setUpdating] = useState(false);
+    const [isDeleting, setDeleting] = useState(false);
+
+
+    // 🔁 INSIDE useEffect: fetchData
+    const fetchData = async () => {
+        try {
+            setIsLoading(true);
+
+            let userResponse = {};
+            let propertiesResponse = [];
+
+            try {
+                userResponse = await new userServices().getProfile();
+            } catch (userErr) {
+                toast.error('Failed to fetch user profile');
+                console.error('User Fetch Error:', userErr);
+                if (userErr.response?.status === 401 || userErr.response?.status === 403) {
+                    navigate('/login');
+                    return;
+                }
+            }
+
+            setUser(userResponse);
+            setFormData({
+                firstname: userResponse.firstname,
+                lastname: userResponse.lastname,
+                username: userResponse.username,
+                avatar: userResponse.avatar
+            });
+
+            try {
+                propertiesResponse = await new propertyService().getPropertyByUserId();
+            } catch (propertyErr) {
+                toast.error('Failed to fetch properties');
+                console.error('Properties Fetch Error:', propertyErr);
+            }
+
+            setProperties(propertiesResponse);
+        } catch (error) {
+            toast.error('Failed to load profile data');
+            console.error('Unknown Profile Load Error:', error);
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
     // Fetch user data and properties
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                setIsLoading(true);
-
-                // Fetch user profile (this will internally use the cookie to get userId)
-                const userResponse = await new userServices().getProfile();
-
-                setUser(userResponse);
-                setFormData({
-                    firstname: userResponse.firstname,
-                    lastname: userResponse.lastname,
-                    username: userResponse.username,
-                    avatar: userResponse.avatar
-                });
-
-                // Fetch user's properties using the userId from the user response
-                const propertiesResponse = await new propertyService().getPropertyByUserId();
-
-                setProperties(propertiesResponse);
-            } catch (error) {
-                toast.error('Failed to fetch profile data');
-                console.error('Error fetching profile:', error);
-                if (error.response?.status === 401 || error.response?.status === 403) {
-                    navigate('/login');
-                }
-            } finally {
-                setIsLoading(false);
-            }
-        };
         fetchData();
-
     }, [navigate]);
 
     const handleEditClick = () => {
@@ -118,13 +134,14 @@ export default function Profile() {
         return isValid;
     };
 
+    // 🔁 IN handleUpdateProfile
     const handleUpdateProfile = async () => {
         if (!validateForm()) return;
+        setUpdating(true);
 
         try {
-            // Prepare update data (JSON format)
             const updateData = new FormData();
-            updateData.append('firntname', formData.firstname);
+            updateData.append('firstname', formData.firstname); // fix typo: 'firntname'
             updateData.append('lastname', formData.lastname);
             updateData.append('username', formData.username);
 
@@ -132,45 +149,66 @@ export default function Profile() {
                 updateData.append('avatar', formData.avatar);
             }
 
-            const response = await new userServices().updateProfile(updateData);
+            await new userServices().updateProfile(updateData);
 
-            // Update the user state with the new data
-            setIsEditing(false);
+            let updatedUser = {};
+            try {
+                updatedUser = await new userServices().getProfile();
+            } catch (err) {
+                toast.error('Profile updated but failed to re-fetch profile');
+                console.error('Profile Refetch Error:', err);
+            }
+
             toast.success('Profile updated successfully!', {
                 autoClose: 2000,
             });
 
-            const userResponse = await new userServices().getProfile();
-            setUser(userResponse);
+            setUser(updatedUser);
+            setIsEditing(false);
         } catch (error) {
             toast.error(error.response?.data?.message || 'Failed to update profile');
-            console.error('Update error:', error);
+            console.error('Update Error:', error);
+        } finally {
+            setUpdating(false);
         }
     };
 
+    // 🔁 IN handleDeleteProperty
     const handleDeleteProperty = async () => {
+        setDeleting(true);
         try {
             await new propertyService().deletePropertyById(propertyToDelete);
 
-            const propertiesResponse = await new propertyService().getPropertyByUserId();
-            propertiesResponse.map(property => ({
-                ...property,
-                images: property.images.map(image => ({ original: image })),
-            }));
+            let propertiesResponse = [];
+            try {
+                propertiesResponse = await new propertyService().getPropertyByUserId();
+            } catch (err) {
+                toast.error('Deleted property but failed to refresh list');
+                console.error('Refetch Properties Error:', err);
+            }
 
             setProperties(propertiesResponse);
-            setConfirmOpen(false);
             toast.success('Property deleted successfully', {
                 autoClose: 2000
             });
+            setConfirmOpen(false);
         } catch (error) {
             toast.error('Failed to delete property');
-            console.error('Delete error:', error);
+            console.error('Delete Error:', error);
+        } finally {
+            setDeleting(false);
         }
     };
 
     if (isLoading) {
-        return <div className="text-center mt-5">Loading profile...</div>;
+        return (
+            <div className="text-center my-5 py-5">
+                <div className="spinner-border text-primary" role="status">
+                    <span className="visually-hidden">Loading...</span>
+                </div>
+                <p className="mt-2">Loading profile...</p>
+            </div>
+        );
     }
 
     return (
@@ -180,12 +218,13 @@ export default function Profile() {
                     {/* Profile Card */}
                     <div className="card shadow mb-4">
                         <div className="card-body text-center p-4">
-                            <img
-                                src={user.avatar || '/default-avatar.png'}
-                                alt="Profile"
-                                className="rounded-circle mb-3"
-                                style={{ width: "150px", height: "150px", objectFit: "cover" }}
-                            />
+                            <div className="profile-avatar-wrapper mb-3">
+                                <img
+                                    src={user.avatar || '/default-avatar.png'}
+                                    alt="Profile"
+                                    className="profile-avatar"
+                                />
+                            </div>
 
                             {isEditing ? (
                                 <div>
@@ -245,7 +284,18 @@ export default function Profile() {
                                             onBlur={validateField}
                                         />
                                     </div>
-                                    <button className="btn btn-success m-2" onClick={handleUpdateProfile}>Save Changes</button>
+                                    <button
+                                        className="btn btn-success m-2"
+                                        onClick={handleUpdateProfile}
+                                        disabled={isUpdating}
+                                    >
+                                        {isUpdating ? (
+                                            <>
+                                                <span className="spinner-border spinner-border-sm me-2"></span>
+                                                Saving...
+                                            </>
+                                        ) : 'Save Changes'}
+                                    </button>
                                     <button className="btn btn-secondary m-2" onClick={() => setIsEditing(false)}>Cancel</button>
                                 </div>
                             ) : (
@@ -348,6 +398,7 @@ export default function Profile() {
                 message="Are you sure you want to delete this property?"
                 title="Confirm Delete"
                 btnText="Delete"
+                isProcessing={isDeleting}
             />
         </div>
     );

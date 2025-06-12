@@ -40,7 +40,7 @@ const PropertyForm = () => {
             console.error('Error:', error);
         }
     };
-
+    
     useEffect(() => {
         if (id) {
             fetchProperty();
@@ -86,7 +86,7 @@ const PropertyForm = () => {
                 longitude: Number(property.longitude),
                 images: property.images
             };
-            
+
             const propertyForm = new FormData();
             for (const key in propertyData) {
                 if (key !== 'images') {
@@ -104,15 +104,21 @@ const PropertyForm = () => {
 
             if (id) {
                 await new propertyService().updateProperty(id, propertyForm);
-                toast.success('Property updated successfully!');
+                toast.success('Property updated successfully!', {
+                    autoClose: 2000,
+                });
             } else {
                 await new propertyService().addProperty(propertyForm);
-                toast.success('Property added successfully!');
+                toast.success('Property added successfully!', {
+                    autoClose: 2000,
+                });
             }
-            
+
             navigate('/profile');
         } catch (error) {
-            toast.error(error.response?.data?.message || 'Operation failed');
+            toast.error(error.response?.data?.message || 'Operation failed', {
+                autoClose: 2000,
+            });
             console.error('Error:', error);
         } finally {
             setIsLoading(false);

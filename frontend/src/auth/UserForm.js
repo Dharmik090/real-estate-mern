@@ -38,8 +38,17 @@ export default function UserForm(props) {
                     {props.inputFields}
 
                     <div className="form-submit">
-                        <button type="submit" className="submit-btn">
-                            {isLoginPage ? "Login" : "Register"}
+                        <button
+                            type='submit'
+                            className="submit-btn"
+                            disabled={props.isProcessing}
+                        >
+                            {props.isProcessing ? (
+                                <>
+                                    <span className="spinner-border spinner-border-sm me-2"></span>
+                                    Processing
+                                </>
+                            ) : (isLoginPage ? "Login" : "Register")}
                         </button>
                     </div>
 

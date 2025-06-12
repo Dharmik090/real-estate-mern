@@ -1,70 +1,43 @@
-import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import banner from "../../banner.jpg";
-import { Link } from "react-router-dom";
 import '../../static/Banner.css';
 
 const Banner = () => {
-    const [searchText, setSearchText] = useState("");
-    const [searchResults, setSearchResults] = useState([]);
-
-    const handleSearchChange = (e) => {
-        const value = e.target.value;
-        setSearchText(value);
-
-        if (value.length === 0) {
-            setSearchResults([]);
-        }
-    };
-
-    const handleSearchClick = () => {
-        console.log("Searching for:", searchText);
-        // Here you would typically make an API call with searchText
-    };
+    const navigate = useNavigate();
 
     return (
-        <div className="banner" style={{ backgroundImage: `url(${banner})` }}>
-            <div className="banner-overlay">
-                <div className="banner-container">
-                    <div className="banner-content">
-                        <h2 className="banner-title">
-                            <strong>Find your properties</strong>
+        <div className="banner" style={{ backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${banner})` }}>
+            <div className="banner-container">
+                <div className="banner-content">
+                    <div className="banner-text">
+                        <h1 className="banner-title">
+                            Find Your Perfect <span className="highlight">Dream Home</span>
+                        </h1>
+                        <h2 className="banner-subtitle">
+                            Discover luxury properties in prime locations
                         </h2>
-
-                        <div className="search-container">
-                            <input
-                                type="text"
-                                value={searchText}
-                                onChange={handleSearchChange}
-                                placeholder="Search properties..."
-                                className="search-input"
-                            />
-
-                            <button
-                                onClick={handleSearchClick}
-                                className="search-button"
-                            >
-                                Search
-                            </button>
-
-                            {searchResults.length > 0 && (
-                                <div className="search-results">
-                                    {searchResults.map(item => (
-                                        <Link
-                                            key={item}
-                                            to="#"
-                                            className="search-result-item"
-                                        >
-                                            {item}
-                                        </Link>
-                                    ))}
-                                </div>
-                            )}
-
-                            {searchText.length > 0 && searchResults.length === 0 && (
-                                <div className="no-results">
-                                    No results found
-                                </div>
-                            )}
+                        <div className="banner-features">
+                            <div className="feature-item">
+                                <i className="fas fa-home"></i>
+                                <span>10,000+ Premium Listings</span>
+                            </div>
+                            <div className="feature-item">
+                                <i className="fas fa-map-marker-alt"></i>
+                                <span>50+ Exclusive Locations</span>
+                            </div>
+                            <div className="feature-item">
+                                <i className="fas fa-award"></i>
+                                <span>Trusted by 5,000+ Clients</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="cta-container">
+                        <button onClick={() => navigate('/search')} className="cta-button">
+                            <i className="fas fa-search"></i> Explore Properties
+                        </button>
+                        <div className="trust-badges">
+                            <span>#1 Real Estate Platform</span>
+                            <span>★★★★★ 4.9/5 (2,500+ Reviews)</span>
                         </div>
                     </div>
                 </div>

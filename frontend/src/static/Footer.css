@@ -37,8 +37,9 @@
 
 .footer-text {
     margin-top: 0.5rem;
-    font-size: 0.85rem;
+    font-size: 0.9rem;
     color: #ccc;
+    margin-bottom: 0.5rem;
 }
 
 .footer-title {
@@ -108,8 +109,8 @@
 .footer-bottom {
     text-align: center;
     border-top: 1px solid #444;
-    padding-top: 0.75rem;
-    margin-top: 0.5rem;
+    padding-top: 0.5rem;
+    margin-top: -1rem;
     font-size: 0.8rem;
     color: #aaa;
 }

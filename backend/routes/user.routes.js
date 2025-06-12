@@ -29,8 +29,6 @@ router.post('/login', userController.userLogIn);
 
 // Apply to /validate route
 router.get('/validate', authMiddleware, (req, res) => {
-    console.log('Cookies:', req.cookies); // Make sure you have cookie-parser middleware
-    console.log('Headers:', req.headers);
     res.json({ valid: true, user: req.user }); // Optional: Return user data
 });
 

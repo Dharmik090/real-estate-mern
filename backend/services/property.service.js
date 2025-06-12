@@ -3,11 +3,12 @@ const ApiError = require('../util/error.util');
 
 
 const searchProperties = async (data) => {
-    const results = await Property.find({
-        $text: { $search: data.query }
-    });
+    const results = await Property.find(data.query)
+        .skip((data.page - 1) * data.limit)
+        .limit(data.limit)
+        .lean();
 
-    const newProperties = properties.map(property => {
+    const newProperties = results.map(property => {
         property.images = property.images.map(img =>
             `data:jpeg;base64,${img.toString('base64')}`
         )
@@ -15,7 +16,7 @@ const searchProperties = async (data) => {
         return property;
     });
 
-    return results;
+    return newProperties;
 }
 
 const addProperty = async (data) => {
@@ -80,6 +81,7 @@ const getRecentProperties = async (data) => {
 
         return property;
     });
+
     return newProperties;
 }
 

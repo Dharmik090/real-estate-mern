@@ -7,6 +7,7 @@ import FlatDetail from '../components/BestFlat/FlatDetail';
 import PropertyForm from '../components/PropertyForm';
 import Blog from '../components/Blog/Blog';
 import ProtectedRoute from '../layout/ProtectedRoute';
+import PropertyExplore from '../components/Explore/PropertyExplore';
 
 const AppRoutes = ({ isLoggedIn, setIsLoggedIn }) => (
     <Routes>
@@ -21,6 +22,8 @@ const AppRoutes = ({ isLoggedIn, setIsLoggedIn }) => (
         <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
         <Route path="/property/add" element={<ProtectedRoute><PropertyForm /></ProtectedRoute>} />
         <Route path="/property/edit/:id" element={<ProtectedRoute><PropertyForm /></ProtectedRoute>} />
+
+        <Route path="/search" element={<ProtectedRoute><PropertyExplore /></ProtectedRoute>} />
     </Routes>
 );
 

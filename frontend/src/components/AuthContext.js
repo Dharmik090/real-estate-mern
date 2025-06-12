@@ -1,6 +1,4 @@
 import { createContext, useContext, useEffect, useState } from 'react';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
 import userService from '../services/userService';
 
 
@@ -15,10 +13,11 @@ export const AuthProvider = ({ children }) => {
 
     const validateSession = async () => {
         try {
-            const response   = await new userService().userValidate();
+            const response = await new userService().userValidate();
+
             setAuthState({
-                isLoggedIn: response.data.valid,
-                user: response.data.user,
+                isLoggedIn: response.valid,
+                user: response.user,
                 loading: false
             });
         } catch (error) {
@@ -31,13 +30,13 @@ export const AuthProvider = ({ children }) => {
     };
 
     const login = async (credentials) => {
-        try {
-            await new userService().userLogIn(credentials);
-            await validateSession();
-            return true;
-        } catch (error) {
-            return false;
+        const response = await new userService().userLogIn(credentials);
+        if (response.success === false) {
+            return { success: false, message: response.message };
         }
+
+        await validateSession();
+        return { success: true };
     };
 
     const logout = async () => {

@@ -11,56 +11,72 @@ import { useAuth } from '../components/AuthContext';
 const Header = () => {
     const { isLoggedIn, user, loading, logout } = useAuth();
     const [isConfirmOpen, setConfirmOpen] = useState(false);
+    const [isProcessing, setIsProcessing] = useState(false);
     const navigate = useNavigate();
 
     if (loading) {
-        return <div className="navbar-container">Loading...</div>;
+        return (
+            <div className="text-center my-5 py-5">
+                <div className="spinner-border text-primary" role="status">
+                    <span className="visually-hidden">Loading...</span>
+                </div>
+                <p className="mt-2">Loading profile...</p>
+            </div>
+        );
     }
 
     const handleLogout = async () => {
-        await logout();
-        setConfirmOpen(false);
-        toast.success('Logout successful!', {
-            position: "top-center",
-            autoClose: 2000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-        });
-        navigate('/');
+
+        setIsProcessing(true);
+        try {
+            await logout();
+            setConfirmOpen(false);
+            toast.success('Logout successful!', {
+                autoClose: 2000,
+            });
+            navigate('/');
+        } catch (error) {
+            toast.success(`Something went wrong. Error: ${error.message}`, {
+                autoClose: 2000,
+            });
+        } finally {
+            setIsProcessing(false);
+        }
+
     }
 
     return (
-        <header className="navbar-container">
-            <div className="navbar-content container">
-                <Link className="brand" to="/">
-                    <i className="fas fa-home"></i>
-                    <span>EstatePrime</span>
-                </Link>
+        <>
+            <header className="navbar-container">
+                <div className="navbar-content container">
+                    <Link className="brand" to="/">
+                        <i className="fas fa-home"></i>
+                        <span>EstatePrime</span>
+                    </Link>
 
-                <input type="checkbox" id="menu-toggle" className="menu-toggle" />
-                <label htmlFor="menu-toggle" className="menu-icon">&#9776;</label>
+                    <input type="checkbox" id="menu-toggle" className="menu-toggle" />
+                    <label htmlFor="menu-toggle" className="menu-icon">&#9776;</label>
 
-                <ul className="nav-links">
-                    <li><Link to="/">Home</Link></li>
-                    <li><Link to="/properties">Properties</Link></li>
+                    <ul className="nav-links">
+                        <li><Link to="/">Home</Link></li>
+                        <li><Link to="/properties">Properties</Link></li>
 
-                    {!isLoggedIn ? (
-                        <li><Link to="/login">Register | Login</Link></li>
-                    ) : (
-                        <>
-                            <li><Link to="/profile">Profile</Link></li>
-                            <li>
-                                <button className="logout-btn" onClick={() => setConfirmOpen(true)}>
-                                    Logout
-                                </button>
-                            </li>
-                        </>
-                    )}
-                </ul>
-            </div>
+                        {!isLoggedIn ? (
+                            <li><Link to="/login">Register | Login</Link></li>
+                        ) : (
+                            <>
+                                <li><Link to="/profile">Profile</Link></li>
+                                <li>
+                                    <button className="logout-btn" onClick={() => setConfirmOpen(true)}>
+                                        Logout
+                                    </button>
+                                </li>
+                            </>
+                        )}
+                    </ul>
+                </div>
+
+            </header>
 
             <ConfirmDialog
                 isOpen={isConfirmOpen}
@@ -69,8 +85,9 @@ const Header = () => {
                 message="Are you sure you want to Logout?"
                 title="Confirm Logout"
                 btnText="Logout"
+                isProcessing={isProcessing}
             />
-        </header>
+        </>
     );
 };
 

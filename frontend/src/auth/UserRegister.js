@@ -19,6 +19,7 @@ const UserRegister = () => {
     const [usernameError, setUsernameError] = useState('');
     const [passwordError, setPasswordError] = useState('');
 
+    const [isProcessing, setIsProcessing] = useState(false);
     const navigator = useNavigate();
 
     const validateField = (e) => {
@@ -62,6 +63,7 @@ const UserRegister = () => {
             return;
         }
 
+        setIsProcessing(true);
         const userData = new FormData();
         userData.append('firstname', firstname);
         userData.append('lastname', lastname);
@@ -71,22 +73,15 @@ const UserRegister = () => {
         if (avatar instanceof File) {
             userData.append('avatar', avatar);
         }
-        
+
         try {
             const response = await new userServices().addUser(userData);
 
             if (response.status === 201) {
                 toast.success('Account created successfully! Redirecting to login...', {
-                    position: "top-center",
                     autoClose: 2000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
                 });
 
-                // Reset form
                 setFirstname('');
                 setLastname('');
                 setUsername('');
@@ -94,17 +89,10 @@ const UserRegister = () => {
                 setPassword('');
                 setAvatar(null);
 
-                // Navigate after a short delay to allow user to see the success message
                 setTimeout(() => navigator("/login"), 2000);
             } else {
                 toast.warning('Registration completed, but with unexpected response', {
-                    position: "top-center",
                     autoClose: 2000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
                 });
             }
         }
@@ -118,60 +106,32 @@ const UserRegister = () => {
                 if (message === 'Email already exist') {
                     setEmailError(message);
                     toast.error('Email already exists. Please use a different email.', {
-                        position: "top-center",
                         autoClose: 2000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
                     });
                 }
                 else if (message === 'Username already exist') {
                     setUsernameError(message);
                     toast.error('Username already exists. Please choose a different username.', {
-                        position: "top-center",
-                        autoClose: 2000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
+                        autoClose: 2000
                     });
                 }
                 else {
                     toast.error('Registration failed. Please try again.', {
-                        position: "top-center",
-                        autoClose: 2000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
+                        autoClose: 2000
                     });
                 }
             } else if (err.request) {
                 toast.error('Network error: Please check your connection', {
-                    position: "top-center",
-                    autoClose: 2000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
+                    autoClose: 2000
                 });
             } else {
                 toast.error('An unexpected error occurred', {
-                    position: "top-center",
-                    autoClose: 2000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
+                    autoClose: 2000
                 });
             }
-        };
+        } finally {
+            setIsProcessing(false);
+        }
     };
 
     const inputFields = (
@@ -226,7 +186,7 @@ const UserRegister = () => {
 
     return (
         <>
-            <UserForm title="Register" inputFields={inputFields} handleSubmit={handleSubmit} />
+            <UserForm title="Register" inputFields={inputFields} handleSubmit={handleSubmit} isProcessing={isProcessing} setIsProcessing={setIsProcessing} />
         </>
     );
 };

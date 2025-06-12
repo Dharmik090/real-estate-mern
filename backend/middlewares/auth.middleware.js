@@ -4,8 +4,7 @@ const authMiddleware = (req,res,next) => {
     // 'Authorization' : 'Bearer <token>'
     // const token = req.header('Authorization').split(' ')[1];
     const token = req.cookies.authToken;
-    console.log(token)
-    console.log(req.cookies);
+
     try{
         if(!token){
             return res.status(401).json({ message : 'Unauthorized access'});

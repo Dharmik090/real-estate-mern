@@ -6,26 +6,101 @@ const userService = require('../services/user.service');
 
 
 const searchProperties = async (req, res, next) => {
-    const query = req.query.q;
-
+    const { q, cities, states, countries, type, status, bhk, maxPrice, minPrice } = req.query;
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    
     try {
-        const properties = await propertyService.searchProperties({ query });
-        return res.status(200).json({ data: properties });
-    }
-    catch (err) {
+
+        // Build the base query
+        const query = {};
+
+        if (q) {
+            console.log(q)
+            query.location = { $regex: q, $options: 'i' };
+            query.description = { $regex: q, $options: 'i' };
+        }
+        console.log(query.location, query.description)
+        // Handle array parameters (cities and countries)
+        if (cities || states || countries) {
+            const orConditions = [];
+
+            if (cities) {
+                const cityList = Array.isArray(cities) ? cities : cities.split(',');
+                orConditions.push({
+                    city: { $in: cityList.map(city => new RegExp(city, 'i')) }
+                });
+            }
+            if (states) {
+                const stateList = Array.isArray(states) ? states : states.split(',');
+                orConditions.push({
+                    state: { $in: stateList.map(state => new RegExp(state, 'i')) }
+                });
+            }
+
+            if (countries) {
+                const countryList = Array.isArray(countries) ? countries : countries.split(',');
+                orConditions.push({
+                    country: { $in: countryList.map(country => new RegExp(country, 'i')) }
+                });
+            }
+
+            if (orConditions.length > 0) {
+                query.$or = query.$or ? query.$or.concat(orConditions) : orConditions;
+            }
+        }
+
+
+        if (type) {
+            const typeList = Array.isArray(type) ? type : type.split(',');
+            query.type = { $in: typeList.map(type => new RegExp(type, 'i')) };
+        }
+
+        if (status) {
+            const statusList = Array.isArray(status) ? status : status.split(',');
+            query.status = { $in: statusList.map(status => new RegExp(status, 'i')) };
+        } 
+
+        if (bhk) {
+            const bhkList = Array.isArray(bhk) ? bhk : bhk.split(',');
+            query.bhk = { $in: bhkList.map(bhk => Number(bhk)) };
+        } 
+
+        if (minPrice || maxPrice) {
+            query.price = {};
+            if (minPrice) query.price.$gte = parseInt(minPrice);
+            if (maxPrice) query.price.$lte = parseInt(maxPrice);
+        }
+
+        const properties = await propertyService.searchProperties({ page, limit, query });
+        return res.status(200).json({
+            page,
+            limit,
+            data: properties
+        });
+
+    } catch (err) {
         next(err);
     }
-}
+};
 
 const addProperty = async (req, res, next) => {
     const userid = req.user.id;
     const { title, description, price, bhk, area, status, location, city, state, country, latitude, longitude } = req.body;
 
-
     try {
         const data = { title, description, price, bhk, area, status, location, city, state, country, latitude, longitude, images: req.files, userid }
         await userService.getUserByUserId({ id: userid })
         const property = await propertyService.addProperty(data);
+
+
+        const cacheKeys = ['properties/recent', 'properties/best'];
+        const cached = cacheKeys.map(async (key) => await redisClient.get(key));
+
+        cached.map(async (cache) => {
+            if (cache)
+                await redisClient.del(cache);
+        })
 
         res.status(201).json({ message: 'Property created successfully' });
     }
