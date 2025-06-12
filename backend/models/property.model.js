@@ -62,12 +62,13 @@ const propertySchema = new mongoose.Schema({
     }
 });
 
-propertySchema.index({
-    title: "text",
-    location: "text",
-    city: "text",
-    state: "text",
-    country: "text"
-});
+// propertySchema.index({
+//     title: "text",
+//     description: "text",
+//     location: "text",
+//     city: "text",
+//     state: "text",
+//     country: "text"
+// });
 
 module.exports = mongoose.model('Property', propertySchema);

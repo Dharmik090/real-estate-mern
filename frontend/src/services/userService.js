@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { Component } from 'react';
-import { getUserIdFromToken } from './auth'; // We'll create this utility
 
 export default class UserService extends Component {
     constructor() {
@@ -8,70 +7,49 @@ export default class UserService extends Component {
         this.api = axios.create({
             // baseURL: 'http://localhost:5000',
             baseURL: 'https://real-estate-mern-backend-7iui.onrender.com',
-            withCredentials: true, // Ensures cookies are sent with requests
-        });;
+            withCredentials: true,
+        });
     }
 
-    addUser(user) {
-        return this.api.post('/users', user, {
+    async addUser(user) {
+        const response = await this.api.post('/users', user, {
             headers: {
                 'Content-Type': 'multipart/form-data'
             }
         });
+
+        return response.data;
     }
 
-    userLogIn(user) {
-        return this.api.post('/login', user);
-    }
-    
-    userValidate() {
-        const response = this.api.get('/validate')
-        return response;
+    async userLogIn(user) {
+        const response = await this.api.post('/login', user);
+        return response.data;
     }
 
-    userLogout() {
-        return this.api.post('/logout', {}, {
-            withCredentials: true
-        }).data;
+    async userValidate() {
+        // console.log('[userValidate] -1')
+        const response = await this.api.get('/validate');
+        return response.data;
+
     }
 
-
+    async userLogout() {
+        const response = await this.api.post('/logout');
+        return response.data;
+    }
 
     async getProfile() {
-        // const userId = await getUserIdFromToken();
-
-        // if (!userId) {
-        //     throw new Error('User not authenticated');
-        // }
-
-        try {
-            // const response = await this.api.get(`/users/${userId}`);
-            const response = await this.api.get(`/users`);
-            return response.data;
-        } catch (error) {
-            this.handleAuthError(error);
-            throw error;
-        }
+        const response = await this.api.get('/users');
+        return response.data;
     }
 
     async updateProfile(user) {
-        try {
-            const response = await this.api.put('/users', user, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-            });
-            return response.data;
-        } catch (error) {
-            this.handleAuthError(error);
-            throw error;
-        }
-    }
-
-    handleAuthError(error) {
-        if (error.response?.status === 401) {
-            // Token expired or invalid
-            window.location.href = '/login';
-        }
+        const response = await this.api.put('/users', user, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        });
+        
+        return response.data;
     }
 }

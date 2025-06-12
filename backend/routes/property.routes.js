@@ -11,6 +11,7 @@ const upload = multer({
     storage: storage,
 });
 
+router.get('/properties/search', authMiddleware, controller.searchProperties);
 
 router.post('/properties', authMiddleware, upload.array('images', 10), controller.addProperty);
 
@@ -28,7 +29,6 @@ router.put('/properties/:id', authMiddleware, upload.array('images', 10), contro
 
 router.delete('/properties/:id', authMiddleware, controller.deletePropertyById);
 
-router.get('/properties/search', authMiddleware, controller.searchProperties);
 
 module.exports = router;
 

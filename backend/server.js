@@ -14,9 +14,9 @@ const app = express();
 
 const corsOptions = {
     origin: 'https://real-estate-mern-frontend-k5v3.onrender.com', // Your frontend URL
-    //   origin: 'http://localhost:3000', // Your frontend URL
+    // origin: 'http://localhost:3000', // Your frontend URL
     credentials: true, // Allow cookies
-    optionsSuccessStatus: 200 // For legacy browsers
+    // optionsSuccessStatus: 200 // For legacy browsers
 };
 
 app.use(cors(corsOptions));
@@ -68,7 +68,8 @@ app.use((err, req, res, next) => {
 
     if (status === 500)
         err.message = 'Server error: ' + err.message
-    res.status(status).json({ success: false, message: err.message });
+
+    return res.status(status).json({ success: false, message: err.message });
 });
 
 app.listen(process.env.PORT || 5000, () => {

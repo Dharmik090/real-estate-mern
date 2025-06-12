@@ -3,13 +3,15 @@ import propertyService from "../../services/propertyService";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import Slider from "react-slick";
 import MapComponent from "../MapComponent";
+import Loader from "../Loader"; // Import the Loader component
 import "../../static/FlatDetail.css";
 
 const FlatDetail = () => {
     const navigate = useNavigate();
     const { id } = useParams();
-    const [property, setProperty] = useState({});
+    const [property, setProperty] = useState(null); // Initialize as null
     const [recentProperties, setRecentProperties] = useState([]);
+    const [isLoading, setIsLoading] = useState(true); // Add loading state
 
     // Slider settings
     const settings = {
@@ -23,24 +25,44 @@ const FlatDetail = () => {
     };
 
     const fetchPropertyData = async () => {
-        const response = await new propertyService().getPropertyById(id);
-        const data = response.data;
-        setProperty(data);
+        try {
+            const response = await new propertyService().getPropertyById(id);
+            console.log(-1, response)
+            setProperty(response);
+        } catch (error) {
+            console.error("Error fetching property:", error);
+        }
     };
-
+    
     const fetchRecentProperties = async () => {
-        const response = await new propertyService().getRecentProperties();
-        const data = response.data.map(property => ({
-            ...property,
-            images: property.images.map(image => ({ original: image }))
-        }));
-        setRecentProperties(data);
+        try {
+            const response = await new propertyService().getRecentProperties();
+            setRecentProperties(response);
+        } catch (error) {
+            console.error("Error fetching recent properties:", error);
+        } finally {
+            setIsLoading(false); // Set loading to false when both requests complete
+        }
     };
-
+    
     useEffect(() => {
+        setIsLoading(true); // Set loading to true when component mounts or id changes
         fetchPropertyData();
         fetchRecentProperties();
     }, [id]);
+
+    // Show loader while data is loading
+    if (isLoading) {
+        return (
+            <div className="text-center my-5 py-5">
+                <div className="spinner-border text-primary" role="status">
+                    <span className="visually-hidden">Loading...</span>
+                </div>
+                <p className="mt-2">Loading profile...</p>
+            </div>
+        );
+    }
+
 
     return (
         <div className="flat-detail-container">
@@ -113,22 +135,22 @@ const FlatDetail = () => {
                         <div className="detail-section">
                             <h3 className="section-title">Location</h3>
                             <div className="map-container">
-                                <MapComponent 
-                                    latitude={property.latitude} 
-                                    longitude={property.longitude} 
+                                <MapComponent
+                                    latitude={property.latitude}
+                                    longitude={property.longitude}
                                 />
                             </div>
                         </div>
 
                         <div className="action-buttons">
-                            <button 
-                                onClick={() => navigate(`/mail/${property._id}`)} 
+                            <button
+                                onClick={() => navigate(`/mail/${property._id}`)}
                                 className="primary-btn"
                             >
                                 Request for {property.status === "For Sell" ? "Buy" : "Rent"}
                             </button>
-                            <button 
-                                onClick={() => navigate('/payment')} 
+                            <button
+                                onClick={() => navigate('/payment')}
                                 className="primary-btn outline"
                             >
                                 Make Payment
@@ -141,13 +163,13 @@ const FlatDetail = () => {
                         <h3 className="sidebar-title">Recently Added</h3>
                         <div className="recent-properties">
                             {recentProperties.map(property => (
-                                <Link 
-                                    to={`/flat/${property._id}`} 
-                                    key={property._id} 
+                                <Link
+                                    to={`/flat/${property._id}`}
+                                    key={property._id}
                                     className="recent-property-item"
                                 >
-                                    <img 
-                                        src={property.images[0]?.original} 
+                                    <img
+                                        src={property.images[0]}
                                         alt={property.title}
                                         className="recent-property-image"
                                     />

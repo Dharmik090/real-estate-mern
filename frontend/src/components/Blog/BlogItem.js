@@ -7,7 +7,7 @@ const BlogItem = ({ property }) => {
         <div className="property-card">
             <div className="property-image-container">
                 <img
-                    src={property.images?.[0] || '/property-placeholder.jpg'}
+                    src={property.images[0] || '/property-placeholder.jpg'}
                     className="property-image"
                     alt={property.title}
                 />

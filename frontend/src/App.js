@@ -17,25 +17,30 @@ function LayoutWrapper() {
 
 function App() {
   return (
-    <Router>
-      <AuthProvider>
+    <AuthProvider>
+      <Router>
         <ConditionalLayout />
-      </AuthProvider>
-    </Router>
+      </Router>
+    </AuthProvider >
   );
 }
 
 // New component to conditionally render Header/Footer
 function ConditionalLayout() {
-  const { isLoggedIn } = useAuth(); // Get auth state
   const location = useLocation();
   const isAuthPage = ['/login', '/register'].includes(location.pathname);
 
   return (
     <>
-      {!isAuthPage && <Header isLoggedIn={isLoggedIn} />}
-      <LayoutWrapper />
-      {!isAuthPage && <Footer />}
+      <div className="d-flex flex-column min-vh-100">
+
+        {!isAuthPage && <Header />}
+        <main className="flex-grow-1">
+          <LayoutWrapper />
+        </main>
+        {!isAuthPage && <Footer />}
+      </div>
+
     </>
   );
 }
