@@ -1,5 +1,5 @@
 import React from 'react';
-import '../static/ConfirmDialog.css';
+import '../../static/ConfirmDialog.css';
 
 const ConfirmDialog = ({ isOpen, onClose, onConfirm, message, title, btnText, isProcessing }) => {
     if (!isOpen) return null;

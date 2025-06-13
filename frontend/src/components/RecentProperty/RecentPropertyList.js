@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
-import Title from "../Title";
-import BestFlatItem from "./BestFlatItem";
-import propertyService from "../../services/propertyService";
+import { React, useEffect, useState } from 'react';
+import Title from "../ui/Title";
+import PropertyCard from "../Property/PropertyCard";
+import propertyService from '../../services/propertyService';
 import '../../static/FlatList.css';
-import Loader from '../Loader'; // Assume you have a Loader component
+import Loader from '../ui/Loader'; // Assume you have a Loader component
 
-export default function BestFlatList({ title, description }) {
+const RecentPropertyList = ({ title, description }) => {
     const [propertyList, setPropertyList] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -14,12 +14,12 @@ export default function BestFlatList({ title, description }) {
         try {
             setLoading(true);
             setError(null);
-            const response = await new propertyService().getBestProperties();
-
+            const response = await new propertyService().getRecentProperties();
+            
             setPropertyList(response || []);
         } catch (error) {
             console.error("Error fetching properties:", error);
-            setError("Failed to load featured properties. Please try again later.");
+            setError("Failed to load properties. Please try again later.");
         } finally {
             setLoading(false);
         }
@@ -40,15 +40,17 @@ export default function BestFlatList({ title, description }) {
                 ) : error ? (
                     <div className="error-message">{error}</div>
                 ) : propertyList.length === 0 ? (
-                    <div className="empty-message">No featured properties available</div>
+                    <div className="empty-message">No recent properties found</div>
                 ) : (
                     <div className="property-grid">
-                        {propertyList.map((property) => (
-                            <BestFlatItem property={property} key={property._id} />
+                        {propertyList.map(property => (
+                            <PropertyCard key={property._id} property={property} />
                         ))}
                     </div>
                 )}
             </div>
         </section>
     );
-}
+};
+
+export default RecentPropertyList;

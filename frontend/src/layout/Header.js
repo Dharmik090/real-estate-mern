@@ -4,9 +4,9 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import ConfirmDialog from "../components/ConfirmDialog";
+import ConfirmDialog from "../components/ui/ConfirmDialog";
 import '../static/Header.css';
-import { useAuth } from '../components/AuthContext';
+import { useAuth } from '../auth/AuthContext';
 
 const Header = () => {
     const { isLoggedIn, user, loading, logout } = useAuth();

@@ -1,7 +1,7 @@
 import React, { Component, useEffect, useState } from "react";
-import propertyService from "../services/propertyService";
+import propertyService from "../../services/propertyService";
 import { useParams } from "react-router-dom";
-import userServices from "../services/userService";
+import userServices from "../../services/userService";
 import UserForm from "./auth/UserForm";
 import axios from "axios";
 

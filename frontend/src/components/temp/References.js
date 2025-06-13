@@ -1,5 +1,5 @@
 import Slider from "react-slick";
-import Title from "./Title"
+import Title from "../Title"
 import ReferenceItem from "./ReferenceItem"
 
 const References = () => {

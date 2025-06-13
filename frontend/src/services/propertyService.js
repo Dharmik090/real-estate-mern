@@ -5,8 +5,8 @@ export default class PropertyService extends Component {
     constructor() {
         super();
         this.api = axios.create({
-            // baseURL: 'http://localhost:5000',
-            baseURL: 'https://real-estate-mern-backend-7iui.onrender.com',
+            baseURL: 'http://localhost:5000',
+            // baseURL: 'https://real-estate-mern-backend-7iui.onrender.com',
             withCredentials: true,
         });
     }

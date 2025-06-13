@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react';
 import Select from 'react-select'
 import { useLocation, useNavigate } from 'react-router-dom';
 import propertyService from '../../services/propertyService';
-import BlogItem from '../Blog/BlogItem';
-import Loader from '../Loader';
+import PropertyCard from './PropertyCard';
+import Loader from '../ui/Loader';
 import '../../static/PropertyExplore.css';
 
 const PropertyExplore = () => {
@@ -341,7 +341,7 @@ const PropertyExplore = () => {
                     <>
                         <div className="property-grid">
                             {properties.map(property => (
-                                <BlogItem key={property._id} property={property} />
+                                <PropertyCard key={property._id} property={property} />
                             ))}
                         </div>
                         {totalPages > 1 && (

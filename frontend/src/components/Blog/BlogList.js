@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import propertyService from "../../services/propertyService";
-import BlogItem from "./BlogItem";
-import Loader from "../Loader";
+import PropertyCard from "../Property/PropertyCard";
+import Loader from "../ui/Loader";
 import "../../static/Blog.css";
 import { useNavigate } from "react-router-dom";
 
@@ -169,7 +169,7 @@ const Blog = () => {
                     <>
                         <div className="property-grid">
                             {propertyList.map(property => (
-                                <BlogItem key={property._id} property={property} />
+                                <PropertyCard key={property._id} property={property} />
                             ))}
                         </div>
 

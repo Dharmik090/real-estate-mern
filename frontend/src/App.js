@@ -1,7 +1,7 @@
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { BrowserRouter as Router, useLocation } from "react-router-dom";
-import { AuthProvider, useAuth } from './components/AuthContext'; // Import AuthProvider
+import { AuthProvider, useAuth } from './auth/AuthContext'; // Import AuthProvider
 import Header from "./layout/Header";
 import AppRoutes from "./routes/AppRoutes";
 import Footer from "./layout/Footer";

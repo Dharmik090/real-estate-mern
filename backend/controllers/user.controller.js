@@ -28,8 +28,8 @@ const userLogIn = async (req, res, next) => {
         res.cookie('authToken', token, {
             httpOnly: true,    // Prevents JS access
             secure: true,      // Only sent over HTTPS
-            // sameSite: 'strict', // Prevents CSRF
-            sameSite: 'None', // for render
+            sameSite: 'strict', // Prevents CSRF
+            // sameSite: 'None', // for render
             maxAge: 3600000,  // 1 hour expiry (in ms)
             // domain: '.onrender.com'
         });

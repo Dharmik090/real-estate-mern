@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import userServices from "../services/userService";
 import propertyService from "../services/propertyService";
-import ConfirmDialog from "../components/ConfirmDialog";
+import ConfirmDialog from "../components/ui/ConfirmDialog";
 import { toast } from 'react-toastify';
-import Loader from '../components/Loader'
+import Loader from '../components/ui/Loader'
 import 'react-toastify/dist/ReactToastify.css';
 import '../static/Profile.css'
 
