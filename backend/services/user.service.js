@@ -92,13 +92,11 @@ const updateUser = async (data) => {
         data.avatar = data.avatar.buffer;
     }
 
-    console.log(data);
     const result = await User.updateOne(
         { _id: data.id },
         { $set: data }
     );
 
-    console.log(result);
     if (result.matchedCount === 0) {
         throw new ApiError('User not found', 404);
     }

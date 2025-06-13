@@ -1,12 +1,12 @@
 // Property form
 
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from "react-router-dom";
-import propertyService from '../services/propertyService';
-import MapComponent from './MapComponent';
+import propertyService from '../../services/propertyService';
+import MapComponent from '../ui/MapComponent';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import '../static/PropertyForm.css'
+import '../../static/PropertyForm.css'
 
 const PropertyForm = () => {
     const { id } = useParams();
@@ -34,13 +34,13 @@ const PropertyForm = () => {
     const fetchProperty = async () => {
         try {
             const response = await new propertyService().getPropertyById(id);
-            setProperty(response.data);
+            setProperty(response);
         } catch (error) {
             toast.error('Failed to fetch property data');
             console.error('Error:', error);
         }
     };
-    
+
     useEffect(() => {
         if (id) {
             fetchProperty();
@@ -192,7 +192,7 @@ const PropertyForm = () => {
                                         />
                                         {errors.price && <div className="invalid-feedback">{errors.price}</div>}
                                     </div>
-                                    <div className="col-md-6 mb-3">
+                                    {/* <div className="col-md-6 mb-3">
                                         <label className="form-label">BHK</label>
                                         <input
                                             type="number"
@@ -202,6 +202,22 @@ const PropertyForm = () => {
                                             onChange={handleInputChange}
                                         />
                                         {errors.bhk && <div className="invalid-feedback">{errors.bhk}</div>}
+                                    </div> */}
+                                    <div className="col-md-6 mb-3">
+                                        <label className="form-label">BHK</label>
+                                        <select
+                                            className="form-control"
+                                            name="bhk"
+                                            value={property.bhk}
+                                            onChange={handleInputChange}
+                                        >
+                                            <option value="">Select BHK</option>
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5+">5+</option>
+                                        </select>
                                     </div>
                                 </div>
 
@@ -226,9 +242,11 @@ const PropertyForm = () => {
                                             onChange={handleInputChange}
                                         >
                                             <option value="">Select Status</option>
-                                            <option value="Available">Available</option>
+                                            <option value="For Rent">For Rent</option>
+                                            <option value="For Sell">For Sell</option>
                                             <option value="Sold">Sold</option>
                                             <option value="Rented">Rented</option>
+                                            <option value="Not Available">Not Available</option>
                                         </select>
                                     </div>
                                 </div>

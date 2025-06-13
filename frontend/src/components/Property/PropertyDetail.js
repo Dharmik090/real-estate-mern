@@ -2,14 +2,14 @@ import { React, useState, useEffect } from "react";
 import propertyService from "../../services/propertyService";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import Slider from "react-slick";
-import MapComponent from "../MapComponent";
-import Loader from "../Loader"; // Import the Loader component
+import MapComponent from "../ui/MapComponent";
+import Loader from "../ui/Loader"; // Import the Loader component
 import "../../static/FlatDetail.css";
 
-const FlatDetail = () => {
+const PropertyDetail = () => {
     const navigate = useNavigate();
     const { id } = useParams();
-    const [property, setProperty] = useState(null); // Initialize as null
+    const [property, setProperty] = useState({}); // Initialize as null
     const [recentProperties, setRecentProperties] = useState([]);
     const [isLoading, setIsLoading] = useState(true); // Add loading state
 
@@ -27,7 +27,6 @@ const FlatDetail = () => {
     const fetchPropertyData = async () => {
         try {
             const response = await new propertyService().getPropertyById(id);
-            console.log(-1, response)
             setProperty(response);
         } catch (error) {
             console.error("Error fetching property:", error);
@@ -58,7 +57,7 @@ const FlatDetail = () => {
                 <div className="spinner-border text-primary" role="status">
                     <span className="visually-hidden">Loading...</span>
                 </div>
-                <p className="mt-2">Loading profile...</p>
+                <p className="mt-2">Loading details...</p>
             </div>
         );
     }
@@ -79,7 +78,7 @@ const FlatDetail = () => {
                     <div className="property-title-section">
                         <h2 className="property-title">{property.title}</h2>
                         <p className="property-location">
-                            <i className="fas fa-map-marker-alt"></i> {property.city}
+                            <i className="fas fa-map-marker-alt"></i> {property.country}
                         </p>
                     </div>
                     <div className="property-price-section">
@@ -107,7 +106,7 @@ const FlatDetail = () => {
                     <div className="property-main-content">
                         <div className="detail-section">
                             <h3 className="section-title">Description</h3>
-                            <p className="section-content">{property.description}</p>
+                            <p className="section-content">{property.description || 'N/A    '}</p>
                         </div>
 
                         <div className="detail-section">
@@ -115,19 +114,23 @@ const FlatDetail = () => {
                             <div className="property-features">
                                 <div className="feature-item">
                                     <span className="feature-label">BHK:</span>
-                                    <span className="feature-value">{property.bhk}</span>
+                                    <span className="feature-value">{property.bhk || 'N/A'}</span>
                                 </div>
                                 <div className="feature-item">
                                     <span className="feature-label">Location:</span>
-                                    <span className="feature-value">{property.location}</span>
+                                    <span className="feature-value">{property.location || 'Location not specified'}</span>
                                 </div>
                                 <div className="feature-item">
                                     <span className="feature-label">City:</span>
-                                    <span className="feature-value">{property.city}</span>
+                                    <span className="feature-value">{property.city || 'N/A'}</span>
+                                </div>
+                                <div className="feature-item">
+                                    <span className="feature-label">State:</span>
+                                    <span className="feature-value">{property.state || 'N/A'}</span>
                                 </div>
                                 <div className="feature-item">
                                     <span className="feature-label">Country:</span>
-                                    <span className="feature-value">{property.country}</span>
+                                    <span className="feature-value">{property.country || 'N/A'}</span>
                                 </div>
                             </div>
                         </div>
@@ -142,7 +145,7 @@ const FlatDetail = () => {
                             </div>
                         </div>
 
-                        <div className="action-buttons">
+                        {/* <div className="action-buttons">
                             <button
                                 onClick={() => navigate(`/mail/${property._id}`)}
                                 className="primary-btn"
@@ -155,7 +158,7 @@ const FlatDetail = () => {
                             >
                                 Make Payment
                             </button>
-                        </div>
+                        </div> */}
                     </div>
 
                     {/* Sidebar Column */}
@@ -184,4 +187,4 @@ const FlatDetail = () => {
     );
 };
 
-export default FlatDetail;
+export default PropertyDetail;

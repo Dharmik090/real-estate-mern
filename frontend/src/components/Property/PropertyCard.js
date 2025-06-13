@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import '../../static/FlatItem.css';
 
-const BestFlatItem = ({ property }) => {
+const PropertyCard = ({ property }) => {
     return (
         <div className="property-card">
             <div className="property-image-container">
@@ -47,4 +47,4 @@ const BestFlatItem = ({ property }) => {
     );
 };
 
-export default BestFlatItem;
+export default PropertyCard;

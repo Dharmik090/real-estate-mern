@@ -16,11 +16,9 @@ const searchProperties = async (req, res, next) => {
         const query = {};
 
         if (q) {
-            console.log(q)
             query.location = { $regex: q, $options: 'i' };
             query.description = { $regex: q, $options: 'i' };
         }
-        console.log(query.location, query.description)
         // Handle array parameters (cities and countries)
         if (cities || states || countries) {
             const orConditions = [];

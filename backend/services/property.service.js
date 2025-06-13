@@ -104,11 +104,9 @@ const getBestProperties = async (data) => {
 
 const updateProperty = async (data) => {
     if (data.images.length !== 0) {
-        console.log(data.images);
         data.images = data.images.map(img => img.buffer);
     }
     else {
-        console.log(-2);
         delete data.images
     }
 
