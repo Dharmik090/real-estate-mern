@@ -3,7 +3,7 @@
 
 ## Overview
 A full-stack real estate application built with the MERN stack. It enables users to list, search, and manage properties with a modern and responsive interface.
-
+<!--
 ## Homepage
 ![Homepage](./images/home.png)
 ## List Properties
@@ -12,7 +12,7 @@ A full-stack real estate application built with the MERN stack. It enables users
 ![User Profile](./images/user_profile.png)
 ## Property Details
 ![Property Details](./images/property.png)
-
+-->
 ## Features
 - **Property Listings**: Browse, search, and filter real estate listings.
 - **Property Management**: Admins can add, edit, and manage property listings.
