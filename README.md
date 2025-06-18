@@ -57,3 +57,7 @@ Open a new terminal and navigate to the client directory and install frontend de
 4. **Access the Application**
 Open your browser and go to http://localhost:5000 to view the app.
 
+
+
+
+
