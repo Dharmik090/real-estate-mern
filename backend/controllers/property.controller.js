@@ -70,11 +70,12 @@ const searchProperties = async (req, res, next) => {
             if (maxPrice) query.price.$lte = parseInt(maxPrice);
         }
 
-        const properties = await propertyService.searchProperties({ page, limit, query });
+        const response = await propertyService.searchProperties({ page, limit, query });
         return res.status(200).json({
             page,
             limit,
-            data: properties
+            total: response.total,
+            data: response.newProperties
         });
 
     } catch (err) {
@@ -112,8 +113,9 @@ const getAllProperties = async (req, res, next) => {
     const limit = parseInt(req.query.limit) || 10;
 
     try {
-        const properties = await propertyService.getAllProperties({ page, limit })
-        res.status(200).json({ page, limit, data: properties });
+        const response = await propertyService.getAllProperties({ page, limit })
+        
+        res.status(200).json({ page, limit, total: response.total, data: response.newProperties });
     }
     catch (err) {
         next(err)

@@ -1,5 +1,6 @@
 import { React, useState, useEffect } from "react";
 import propertyService from "../../services/propertyService";
+import userService from '../../services/userService';
 import { useParams, Link, useNavigate } from "react-router-dom";
 import Slider from "react-slick";
 import MapComponent from "../ui/MapComponent";
@@ -7,11 +8,11 @@ import Loader from "../ui/Loader"; // Import the Loader component
 import "../../static/FlatDetail.css";
 
 const PropertyDetail = () => {
-    const navigate = useNavigate();
     const { id } = useParams();
     const [property, setProperty] = useState({}); // Initialize as null
     const [recentProperties, setRecentProperties] = useState([]);
     const [isLoading, setIsLoading] = useState(true); // Add loading state
+    const [ownerDetails, setOwnerDetails] = useState(null); // Add state for owner details
 
     // Slider settings
     const settings = {
@@ -32,18 +33,29 @@ const PropertyDetail = () => {
             console.error("Error fetching property:", error);
         }
     };
-    
+
     const fetchRecentProperties = async () => {
         try {
             const response = await new propertyService().getRecentProperties();
             setRecentProperties(response);
+            fetchOwnerDetails();
         } catch (error) {
             console.error("Error fetching recent properties:", error);
         } finally {
             setIsLoading(false); // Set loading to false when both requests complete
         }
     };
-    
+
+    const fetchOwnerDetails = async () => {
+        try {
+            console.log(property);
+            const response = await new userService().getOwnerDetails(property.userid);
+            setOwnerDetails(response);
+        } catch (error) {
+            console.error("Error fetching owner details:", error);
+        }
+    };
+
     useEffect(() => {
         setIsLoading(true); // Set loading to true when component mounts or id changes
         fetchPropertyData();
@@ -61,7 +73,6 @@ const PropertyDetail = () => {
             </div>
         );
     }
-
 
     return (
         <div className="flat-detail-container">
@@ -144,6 +155,28 @@ const PropertyDetail = () => {
                                 />
                             </div>
                         </div>
+
+                        {/* Contact Details Section */}
+                        {ownerDetails && (
+                            <div className="detail-section">
+                                <h3 className="section-title">Contact Details</h3>
+                                <div className="contact-details">
+                                    <div className="contact-item">
+                                        <span className="contact-label">Name:</span>
+                                        <span className="contact-value contact-name">
+                                            {(ownerDetails.firstname + ' ' + ownerDetails.lastname) || 'N/A'}
+                                        </span>
+                                    </div>
+                                    <div className="contact-item">
+                                        <span className="contact-label">Email:</span>
+                                        <span className="contact-value contact-email">
+                                            {ownerDetails.email || 'N/A'}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
 
                         {/* <div className="action-buttons">
                             <button

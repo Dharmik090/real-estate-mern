@@ -107,11 +107,25 @@ const deleteUserById = async (req, res, next) => {
     }
 }
 
+const getOwnerDetails = async (req, res, next) => {
+    const id = req.params.userId;
+
+    try{
+        const user = await userService.getOwnerDetails({ id });
+        
+        res.status(200).json(user);
+    }
+    catch(err){
+        next(err);
+    }
+}
+
 module.exports = {
     addUser,
     getUserByUserId,
     getAllUsers,
     userLogIn,
     updateUser,
-    deleteUserById
+    deleteUserById,
+    getOwnerDetails
 }

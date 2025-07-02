@@ -116,6 +116,19 @@ const deleteUser = async (data) => {
 
 }
 
+const getOwnerDetails = async (data) => {
+    const user = await User.findById(data.id).lean();
+
+    if (!user) {
+        throw new ApiError('User not found', 404);
+    }
+
+    return {
+        firstname: user.firstname,
+        lastname: user.lastname,
+        email: user.email
+    };
+}
 
 module.exports = {
     registerUser,
@@ -123,5 +136,6 @@ module.exports = {
     getUserByUserId,
     getAllUsers,
     updateUser,
-    deleteUser
+    deleteUser,
+    getOwnerDetails
 }

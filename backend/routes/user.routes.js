@@ -13,6 +13,7 @@ const upload = multer({
     limits: { fileSize: 1000000 }, // Limit file size to 1MB
 });
 
+router.get('/users/owner/:userId', userController.getOwnerDetails);
 
 router.post('/users', upload.single('avatar'), userController.addUser);
 

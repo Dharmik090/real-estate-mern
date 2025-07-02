@@ -30,27 +30,43 @@ const PropertyExplore = () => {
 
 
     const cityOptions = [
-        { value: 'New York', label: 'New York' },
-        { value: 'Los Angeles', label: 'Los Angeles' },
-        { value: 'Chicago', label: 'Chicago' },
-        { value: 'Houston', label: 'Houston' },
-        { value: 'Miami', label: 'Miami' },
+        { value: 'Rajkot', label: 'Rajkot' },
+        { value: 'Ahmedabad', label: 'Ahmedabad' },
+
+        { value: 'Mumbai', label: 'Mumbai' },
+        { value: 'Pune', label: 'Pune' },
+
+        { value: 'Delhi', label: 'Delhi' },
+
+        { value: 'Indore', label: 'Indore' },
+        { value: 'Bhopal', label: 'Bhopal' },
+
+        { value: 'Ludhiana', label: 'Ludhiana' },
+        { value: 'Amritsar', label: 'Amritsar' },
+
+        { value: 'Lucknow', label: 'Lucknow' },
+        { value: 'Varanasi', label: 'Varanasi' },
+
+        { value: 'Bengaluru', label: 'Bengaluru' },
+        { value: 'Mysuru', label: 'Mysuru' },
     ];
 
     const countryOptions = [
         { value: 'USA', label: 'USA' },
         { value: 'India', label: 'India' },
-        { value: 'Canada', label: 'Canada' },
-        { value: 'Australia', label: 'Australia' },
-        { value: 'UK', label: 'UK' },
+        // { value: 'Canada', label: 'Canada' },
+        // { value: 'Australia', label: 'Australia' },
+        // { value: 'UK', label: 'UK' },
     ];
 
     const stateOptions = [
         { value: 'Gujarat', label: 'Gujarat' },
         { value: 'Maharashtra', label: 'Maharashtra' },
-        { value: 'California', label: 'California' },
-        { value: 'England', label: 'England' },
-        { value: 'Queensland', label: 'Queensland' },
+        { value: 'Rajshthan', label: 'Rajshthan' },
+        { value: 'Madhya Pradesh', label: 'Madhya Pradesh' },
+        { value: 'Karnataka', label: 'Karnataka' },
+        { value: 'Uttar Pradesh', label: 'Uttar Pradesh' },
+        { value: 'Punjab', label: 'Punjab' },
     ];
 
     const bhkOptions = ['1', '2', '3', '4', '5+'].map(v => ({ value: v, label: `${v} BHK` }));
@@ -104,7 +120,9 @@ const PropertyExplore = () => {
         setError(null);
         try {
             const response = await new propertyService().getPropertiesBySearch(filterParams, page, limit);
+
             setProperties(response.data || []);
+            setTotalItems(response.total || 0);
         } catch (error) {
             console.error('Error fetching properties:', error);
             setError('Failed to load properties. Please try again later.');
@@ -211,7 +229,7 @@ const PropertyExplore = () => {
                 pages.push(
                     <button
                         key={i}
-                        className={currentPage === i ? "active" : ""}
+                        className={`page-number ${currentPage === i ? "active" : ""}`}
                         onClick={() => handlePageChange(i)}
                         disabled={loading}
                     >
@@ -223,6 +241,7 @@ const PropertyExplore = () => {
             pages.push(
                 <button
                     key={1}
+                    className={`page-number ${currentPage === 1 ? "active" : ""}`}
                     onClick={() => handlePageChange(1)}
                     disabled={loading}
                 >
@@ -230,7 +249,7 @@ const PropertyExplore = () => {
                 </button>
             );
 
-            if (currentPage > 3) pages.push(<span key="start-ellipsis">...</span>);
+            if (currentPage > 3) pages.push(<span key="start-ellipsis" className="ellipsis">...</span>);
 
             const startPage = Math.max(2, currentPage - 1);
             const endPage = Math.min(totalPages - 1, currentPage + 1);
@@ -239,7 +258,7 @@ const PropertyExplore = () => {
                 pages.push(
                     <button
                         key={i}
-                        className={currentPage === i ? "active" : ""}
+                        className={`page-number ${currentPage === i ? "active" : ""}`}
                         onClick={() => handlePageChange(i)}
                         disabled={loading}
                     >
@@ -248,11 +267,12 @@ const PropertyExplore = () => {
                 );
             }
 
-            if (currentPage < totalPages - 2) pages.push(<span key="end-ellipsis">...</span>);
+            if (currentPage < totalPages - 2) pages.push(<span key="end-ellipsis" className="ellipsis">...</span>);
 
             pages.push(
                 <button
                     key={totalPages}
+                    className={`page-number ${currentPage === totalPages ? "active" : ""}`}
                     onClick={() => handlePageChange(totalPages)}
                     disabled={loading}
                 >
@@ -310,7 +330,7 @@ const PropertyExplore = () => {
             <div className="property-results">
                 <div className="results-header">
                     <h2 className="results-title">
-                        {properties.length} {properties.length === 1 ? 'Property' : 'Properties'} Found
+                        {totalItems} Properties Found
                     </h2>
                     <div className="pagination-controls">
                         <div className="items-per-page">

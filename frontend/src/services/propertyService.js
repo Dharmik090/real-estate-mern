@@ -46,8 +46,8 @@ export default class PropertyService extends Component {
         return response.data;
     }
 
-    async getPropertiesBySearch(query) {
-        const response = await this.api.get(`/properties/search?${query.toString()}`);
+    async getPropertiesBySearch(query, page, limit) {
+        const response = await this.api.get(`/properties/search?${query.toString()}&page=${page}&limit=${limit}`);
         return response.data;
     }
 

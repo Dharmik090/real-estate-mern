@@ -43,6 +43,11 @@ export default class UserService extends Component {
         return response.data;
     }
 
+    async getOwnerDetails(userId) {
+        const response = await this.api.get(`/users/owner/${userId}`);
+        return response.data;
+    }
+
     async updateProfile(user) {
         const response = await this.api.put('/users', user, {
             headers: {

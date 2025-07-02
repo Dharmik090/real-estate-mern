@@ -3,6 +3,7 @@ const ApiError = require('../util/error.util');
 
 
 const searchProperties = async (data) => {
+    const total = await Property.find(data.query).countDocuments();
     const results = await Property.find(data.query)
         .skip((data.page - 1) * data.limit)
         .limit(data.limit)
@@ -16,7 +17,7 @@ const searchProperties = async (data) => {
         return property;
     });
 
-    return newProperties;
+    return { total, newProperties };
 }
 
 const addProperty = async (data) => {
@@ -29,6 +30,7 @@ const addProperty = async (data) => {
 }
 
 const getAllProperties = async (data) => {
+    const total = await Property.countDocuments();
     const properties = await Property.find().skip((data.page - 1) * data.limit).limit(data.limit).lean();
 
     const newProperties = properties.map(property => {
@@ -38,7 +40,7 @@ const getAllProperties = async (data) => {
         return property;
     });
 
-    return newProperties;
+    return { total, newProperties };
 }
 
 const getPropertyById = async (data) => {
