@@ -34,7 +34,15 @@ router.get('/validate', authMiddleware, (req, res) => {
 });
 
 router.post('/logout', authMiddleware, (req, res) => {
-    res.clearCookie('authToken'); // Remove the HTTP-only cookie
+    // res.clearCookie('authToken'); // Remove the HTTP-only cookie
+
+    res.clearCookie("token", {
+        httpOnly: true,
+        secure: true,       // Only if using HTTPS
+        sameSite: "None",   // If using cross-origin cookies
+        path: "/",
+    });
+
     res.json({ success: true });
 });
 
